@@ -15,7 +15,7 @@ private:
 public:
     TrainTimeTable(Train t, int st, std::vector<int> tm);
 
-    void setOffset();
+    void setOffset(); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno
 
     ~TrainTimeTable();
@@ -27,7 +27,7 @@ private:
 public:
     TimeTable(std::string file);
 
-    void setOffset();
+    void setOffset(Train t); //imposta il ritardo
     void toString() const; //stampa l'intero tabellone
 
     ~TimeTable();
