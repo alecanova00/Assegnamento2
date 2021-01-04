@@ -1,14 +1,32 @@
-//
-// Created by Alessandro Canova on 01/01/21.
-//
 
-#ifndef ASSEGNAMENTO_2_TRAIN_H
-#define ASSEGNAMENTO_2_TRAIN_H
-
-
-class Train {
-
+public class Train
+{
+	virtual void move();
+	virtual bool can_move();
+	virtual Train_type get_type();
+	virtual int get_max_speed();
+	virtual int get_cruise_speed();
+	virtual int get_actual_speed();
+	virtual int get_train_number();
+	virtual int get_delay();
+	virtual Station get_actual_station();
+	virtual Station get_next_station();
+	virtual int get_remaining_time();
+protected:
+	Train();
+	const int MAX_SPEED;
+	int CRUISE_SPEED;
+	int actual_speed;
+	int rail_position;
+	int delay;
+	Timetable table;
+	Station actual_station;
+	Station next_statiom;
+	int next_station_distance;
+	Train_type type;
 };
 
-
-#endif //ASSEGNAMENTO_2_TRAIN_H
+public enum Train_type
+{
+	{Regional = 1, High_speed = 2, Super_high_speed = 3};
+};
