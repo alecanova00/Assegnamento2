@@ -12,9 +12,15 @@ High_speed_train::High_speed_train(int speed, TimeTable* tbl, StationLink* stns,
 		throw new exception("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
-	actual_station = stns;
+	StationLink* tmp= pick(stns);
+	if (forward)
+		actual_station = tmp;
+	else
+	{
+		actual_station = revert(tmp);
+	}
 	train_number = nmb;
-	next_station = stns->get_next_link();
+	next_station = tmp->get_next_link();
 }
 High_speed_train::High_speed_train(const High_speed_train& train) noexcept //?
 {
@@ -44,7 +50,6 @@ High_speed_train& High_speed_train::operator= (High_speed_train&& train)noexcept
 }
 High_speed_train::~High_speed_train()
 {
-	//?
 }
 void High_speed_train::move() {
 	if (get_remaining_time() > 0)
@@ -135,12 +140,9 @@ void High_speed_train::start_from_station()
 {
 	if (actual_station->get_next_link() != nullptr)
 	{
+		Station next = actual_station->get_next_link()->get_station();
 		next_station_distance = next_station->get_station()->get_station_distance() - actual_station->get_station()->get_station_distance();
 		actual_station = nullptr;
-	}
-	else
-	{
-		//capolinea
 	}
 }
 bool High_speed_train::is_arrived()
@@ -148,11 +150,44 @@ bool High_speed_train::is_arrived()
 	if (next_station_distance == 0)
 		actual_station = next_station;
 	prev_station_distance = 0;
-	next_station = actual_station->get_next_link();
-	//controllo se devo fermarmi
-	//se no
-	//	riparti
-	//se si
-	//remaining time=5
-	//avverti stazione
+	next_station = actual_station->get_next_link();	
+}
+
+vector<Station> High_speed_train::get_train_path()
+{
+	StationLink* tmp = actual_station;
+	vector<Station> return_vector;
+	while (tmp != nullptr)
+	{
+		return_vector.push_back(tmp);
+		tmp = tmp->get_next_link();
+	}
+	delete tmp;
+	return return_vector;
+StationLink* High_speed_train::pick(StationLink* stns)
+{
+	StationLink* tmp = actual_station;
+	while (tmp->get_next_link()!=nullptr)
+	{
+		if (tmp->get_station()->get_station_type() == 1)
+		{
+			tmp->get_previous_link()->set_next_link() = tmp->set_next_link();
+			tmp->get_next_link()->set_previous_link() = tmp->set_previous_link();
+			tmp = tmp->get_next_link();
+		}
+		if (tmp->get_next_link()->get_station()->get_station_type() == 1)
+			tmp->set_next_link() = nullptr;
+	}
+	return tmp;
+}
+StationLink* High_speed_train::revert(StationLink* stns)
+{
+	while (stns->get_next_link() != nullptr)stns = stns->get_next_link();
+	StationLink* tmp;
+	while (stns->get_previous_link() != nullptr)
+	{
+		tmp->set_next_link() = stns->get_previous_link();
+		tmp->set_previous_link() = stns->get_next_link();
+	}
+	return tmp;
 }

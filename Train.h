@@ -36,8 +36,8 @@ protected:
 	Train_type type;
 	int train_number;
 	bool forward_direction;
-	vector<Station> train_path;
 	virtual vector<Station> get_train_path();
+	virtual StationLink* revert(const StationLink* stns);
 };
 
 enum class Train_type

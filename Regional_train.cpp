@@ -2,7 +2,7 @@
 // Created by Alessandro Visentin on 04/01/21.
 //
 #include "Regional_train.h"
-Regional_train::Regional_train(int speed, StationLink* stns, int nmb)
+Regional_train::Regional_train(int speed,const StationLink* stns, int nmb,bool forward)
 {
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
@@ -10,7 +10,12 @@ Regional_train::Regional_train(int speed, StationLink* stns, int nmb)
 		throw new exception("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
-	actual_station = stns; //salvare solo liste da fare
+	if (forward)
+		actual_station = stns;
+	else
+	{
+		actual_station=revert(stns);
+	}
 	train_number = nmb;
 	next_station = stns->get_next_link();
 }
@@ -149,5 +154,25 @@ bool Regional_train::is_arrived()
 
 vector<Station> Regional_train::get_train_path()
 {
-	return train_path;
+	StationLink* tmp = actual_station;
+	vector<Station> return_vector;
+	while (tmp!=nullptr)
+	{
+		return_vector.push_back(tmp);
+		tmp = tmp->get_next_link();
+	}
+	delete tmp;
+	return return_vector;
+}
+
+StationLink* Regional_train::revert(StationLink* stns)
+{
+	while (stns->get_next_link() != nullptr)stns = stns->get_next_link();
+	StationLink* tmp;
+	while (stns->get_previous_link() != nullptr)
+	{
+		tmp->set_next_link() = stns->get_previous_link();
+		tmp->set_previous_link() = stns->get_next_link();
+	}
+	return tmp;
 }

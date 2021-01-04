@@ -10,8 +10,11 @@
 	High_speed_train(const High_speed_train&& train) noexcept;
 	High_speed_train& operator= (High_speed_train& train)noexcept;
 	High_speed_train& operator= (High_speed_train&& train)noexcept;
+	vector<Station> get_train_path();
 	~High_speed_train();
 private:
 	const int MAX_SPEED = 240;
 	Train_type type = Train_type::High_speed_train;
+	StationLink* revert(const StationLink* stns);
+	StationLink* pick(const StationLink* pick);
 };
