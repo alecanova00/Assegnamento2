@@ -1,6 +1,7 @@
+
 #include "StationLink.h"
-#include "Station.h"
-#include "Rail.h"
+
+
 
 using namespace std;
 
@@ -24,7 +25,7 @@ int Rail::get_train(){
 void Rail::clear_rail(){
     train = -1;
 }
-
+/*
 int Rail::get_max_speed(){
     return MAX_SPEED;
 }
@@ -32,7 +33,7 @@ int Rail::get_max_speed(){
 int Rail::get_speed_limit_length(){
     return SPEED_LIMIT_LENGTH;
 }
-
+*/
 int Rail::get_time(){
     return time;
 }
@@ -59,6 +60,8 @@ Station::Station(){
 Station::Station(string sn = "default",double sd = 50){
     station_name = sn;
     station_distance = sd;
+    standard_rail_forward = new Rail[2];
+    standard_rail_backward = new Rail[2];
 }
 
 Station::~Station(){
@@ -89,10 +92,10 @@ int Station::get_station_type(){
 }
 
 bool Station::get_standard_rail_forward_status(int index){
-    return standard_rail_forward[index]->is_free();
+    return standard_rail_forward[index].is_free();
 }
 bool Station::get_standard_rail_backward_status(int index){
-    return standard_rail_backward[index]->is_free();
+    return standard_rail_backward[index].is_free();
 }
 
 
@@ -103,10 +106,18 @@ bool Station::is_rail_free(int direction){
     if(direction = 0){
 
         for(int i = 0; i < 2; i++){
-            status = get_standard_rail_forward_status(i);
+             if(get_standard_rail_forward_status(i)) return true;
         }
+        
+    }
+    else{
+        for(int i = 0; i < 2; i++){
+            if(get_standard_rail_backward_status(i)) return true;
+        }
+
     }
     
+    return false;
 
 
 };

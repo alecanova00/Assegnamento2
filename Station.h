@@ -1,3 +1,7 @@
+
+#ifndef Station
+
+
 #include <iostream>
 #include <string>
 #include "Rail.h"
@@ -8,13 +12,13 @@ using namespace std;
 
 
 
-//template <typename T>
+
 class Station{
 
     string station_name; 
     double station_distance;
-    Rail* standard_rail_forward[2];
-    Rail* standard_rail_backward[2];
+    Rail* standard_rail_forward;
+    Rail* standard_rail_backward;
     
 
     public:
@@ -82,3 +86,4 @@ class SecondaryStation : public Station{
 
 
 
+#endif
