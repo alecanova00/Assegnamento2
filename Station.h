@@ -39,13 +39,13 @@ class Station{
         void set_standard_rail_forward_status(int index,bool status);
         void set_standard_rail_backward_status(bool status);
 
+        bool is_rail_free(int direction);
 
+        bool set_on_rail(int train_number,int direction);
 
+        int train_pause_time(int train_number);
 
-
-
-
-
+        void free_train(int train_number);
 
 
 

@@ -3,15 +3,9 @@
 using namespace std;
 
 
-
-    class Train{
-        Train();
-    };
-
-    
     class Rail{
 
-        Train* train;
+        int train;
         int const MAX_SPEED = 80;
         int const SPEED_LIMIT_LENGTH = 10;
         int time;
@@ -21,8 +15,8 @@ using namespace std;
 
             Rail();
 
-            void set_train(Train* t);
-            Train* get_train();
+            void set_train(int t);
+            int get_train();
 
             void clear_rail();
 

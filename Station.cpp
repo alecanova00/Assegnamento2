@@ -4,27 +4,25 @@
 
 using namespace std;
 
-Train::Train(){
 
-}
 
 Rail::Rail(){
 
-    train = nullptr;
+    train = -1;
     time = 0;
 
 }
 
-void Rail::set_train(Train* t){
+void Rail::set_train(int t){
     train = t;
 }
 
-Train* Rail::get_train(){
+int Rail::get_train(){
     return train;
 }
 
 void Rail::clear_rail(){
-    train = nullptr;
+    train = -1;
 }
 
 int Rail::get_max_speed(){
@@ -40,7 +38,7 @@ int Rail::get_time(){
 }
 
 bool Rail::is_free(){
-    return (train == nullptr);
+    return !(train == -1);
 }
 
 void Rail::decrease_time(){
@@ -96,6 +94,29 @@ bool Station::get_standard_rail_forward_status(int index){
 bool Station::get_standard_rail_backward_status(int index){
     return standard_rail_backward[index]->is_free();
 }
+
+
+bool Station::is_rail_free(int direction){
+
+    bool status;
+
+    if(direction = 0){
+
+        for(int i = 0; i < 2; i++){
+            status = get_standard_rail_forward_status(i);
+        }
+    }
+    
+
+
+};
+
+
+
+
+
+
+
 
 /*void Station::set_standard_rail_forward_status(int index,bool status,Train train){
     standard_rail_forward[index]->
