@@ -26,12 +26,13 @@ static std::vector<int> timeConversion(int time){
 
 class TrainTimeTable{
 private:
-    Train train;
+    int train;
     int stationType;
+    int trainType;
     std::vector<int> times;
 public:
 
-    TrainTimeTable(Train t, int st, std::vector<int> tm);
+    TrainTimeTable(int t, int st, int tt, std::vector<int> tm);
 
     void setOffset(); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno
