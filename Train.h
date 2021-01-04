@@ -29,7 +29,6 @@ protected:
 	int actual_speed;
 	int rail_position;
 	int delay;
-	TimeTable* table;
 	StationLink* actual_station;
 	StationLink* next_station;
 	int next_station_distance;
