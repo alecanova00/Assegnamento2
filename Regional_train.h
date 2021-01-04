@@ -2,7 +2,7 @@
 #include "Train.h"
  class Regional_train:public Train
 {
-	Regional_train(int speed);
+	Regional_train(int speed, TimeTable* tbl);
 	Regional_train(const Regional_train& train) noexcept;
 	Regional_train(const Regional_train&& train) noexcept;
 	Regional_train& operator= (Regional_train& train)noexcept;

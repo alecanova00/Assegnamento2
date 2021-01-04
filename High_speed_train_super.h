@@ -3,7 +3,7 @@
 class High_speed_train_super:public Train
 {
 public:
-	High_speed_train_super(int speed);
+	High_speed_train_super(int speed,TimeTable* tbl);
 	High_speed_train_super(const High_speed_train_super& train) noexcept;
 	High_speed_train_super(const High_speed_train_super&& train) noexcept;
 	High_speed_train_super& operator= (High_speed_train_super& train)noexcept;

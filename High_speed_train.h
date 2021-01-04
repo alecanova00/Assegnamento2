@@ -1,8 +1,8 @@
 #pragma once
-#import "Train.h"
+#include "Train.h"
  class High_speed_train:public Train
 {
-	High_speed_train(int speed);
+	High_speed_train(int speed, TimeTable* tbl);
 	High_speed_train(const High_speed_train& train) noexcept;
 	High_speed_train(const High_speed_train&& train) noexcept;
 	High_speed_train& operator= (High_speed_train& train)noexcept;
