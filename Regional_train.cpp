@@ -2,26 +2,22 @@
 // Created by Alessandro Visentin on 04/01/21.
 //
 #include "Regional_train.h"
-Regional_train::Regional_train(int speed, TimeTable* tbl, StationLink* stns, int nmb)
+Regional_train::Regional_train(int speed, StationLink* stns, int nmb)
 {
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
-	if (tbl == nullptr)
-		throw new exception("Timetable is null!");
-	if (tbl == nullptr)
+	if (stns == nullptr)
 		throw new exception("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
-	table = tbl;
-	actual_station = stns;
+	actual_station = stns; //salvare solo liste da fare
 	train_number = nmb;
 	next_station = stns->get_next_link();
 }
-Regional_train::Regional_train(const Regional_train& train) noexcept //?
+Regional_train::Regional_train(const Regional_train& train) noexcept
 {
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
-	table = train.table;
 	actual_station = train.actual_station;
 	next_station = train.next_station();
 }
@@ -29,7 +25,6 @@ Regional_train::Regional_train(const Regional_train&& train) noexcept
 {
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
-	table = train.table;
 	actual_station = train.actual_station;
 	next_station = train.next_station();
 	delete train;
@@ -47,7 +42,8 @@ Regional_train& Regional_train::operator= (Regional_train&& train)noexcept
 }
 Regional_train::~Regional_train()
 {
-	//?
+	delete actual_station;
+	delete next_station;
 }
 void Regional_train::move() {
 	if (get_remaining_time() > 0)
@@ -132,7 +128,7 @@ Station Regional_train::get_next_station()
 	return next_station->get_station();
 }
 int Regional_train::get_remaining_time() {
-	actual_station->get_station()//metodo per il tempo rimanente
+	actual_station->get_station()
 }
 void Regional_train::start_from_station()
 {
@@ -141,21 +137,12 @@ void Regional_train::start_from_station()
 		next_station_distance = next_station->get_station()->get_station_distance() - actual_station->get_station()->get_station_distance();
 		actual_station = nullptr;
 	}
-	else
-	{
-		//capolinea
-	}
 }
 bool Regional_train::is_arrived()
 {
-	if (next_station_distance == 0)
+	if (next_station_distance <= 0)
 		actual_station = next_station;
 	prev_station_distance = 0;
 	next_station = actual_station->get_next_link();
-	//controllo se devo fermarmi
-	//se no
-	//	riparti
-	//se si
-	//remaining time=5
-	//avverti stazione
+	actual_station->get_station()->//numero treno, 0 se forward, 1 se backward
 }
