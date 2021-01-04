@@ -1,20 +1,21 @@
 
-class Train
+public class Train
 {
-	void move();
-	bool can_move();
-	Train_type get_type();
-	int get_max_speed();
-	int get_cruise_speed();
-	int get_actual_speed();
-	int get_train_number();
-	int get_delay();
-	Station get_actual_station();
-	Station get_next_station();
-	int get_remaining_time();
-private:
+	virtual void move();
+	virtual bool can_move();
+	virtual Train_type get_type();
+	virtual int get_max_speed();
+	virtual int get_cruise_speed();
+	virtual int get_actual_speed();
+	virtual int get_train_number();
+	virtual int get_delay();
+	virtual Station get_actual_station();
+	virtual Station get_next_station();
+	virtual int get_remaining_time();
+protected:
+	Train();
 	const int MAX_SPEED;
-	const int CRUISE_SPEED;
+	int CRUISE_SPEED;
 	int actual_speed;
 	int rail_position;
 	int delay;
@@ -22,6 +23,7 @@ private:
 	Station actual_station;
 	Station next_statiom;
 	int next_station_distance;
+	Train_type type;
 };
 
 public enum Train_type
