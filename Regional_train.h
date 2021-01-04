@@ -5,11 +5,12 @@
 #include "Train.h"
  class Regional_train:public Train
 {
-	Regional_train(int speed, TimeTable* tbl,StationLink stns,int nmb);
+	Regional_train(int speed,StationLink stns,int nmb);
 	Regional_train(const Regional_train& train) noexcept;
 	Regional_train(const Regional_train&& train) noexcept;
 	Regional_train& operator= (Regional_train& train)noexcept;
 	Regional_train& operator= (Regional_train&& train)noexcept;
+	vector<Station> get_train_path();
 	~Regional_train();
 private:
 	const int MAX_SPEED=160;

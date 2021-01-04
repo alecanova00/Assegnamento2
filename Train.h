@@ -4,6 +4,7 @@
 #pragma once
 #include "Station.h"
 #include "StationLink.h"
+#include "vector"
 class Train
 {
 	virtual void move();
@@ -35,7 +36,8 @@ protected:
 	Train_type type;
 	int train_number;
 	bool forward_direction;
-
+	vector<Station> train_path;
+	virtual vector<Station> get_train_path();
 };
 
 enum class Train_type

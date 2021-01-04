@@ -146,3 +146,8 @@ bool Regional_train::is_arrived()
 	next_station = actual_station->get_next_link();
 	actual_station->get_station()->//numero treno, 0 se forward, 1 se backward
 }
+
+vector<Station> Regional_train::get_train_path()
+{
+	return train_path;
+}
