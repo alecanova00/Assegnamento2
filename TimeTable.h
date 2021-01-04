@@ -41,10 +41,10 @@ public:
 
 class TimeTable {
 private:
-    TrainTimeTable ttt;
+    std::vector<TrainTimeTable> ttt;
 public:
     TimeTable(std::string file);
-
+    void chechOrari();
     void setOffset(Train t); //imposta il ritardo
     void toString() const; //stampa l'intero tabellone
 

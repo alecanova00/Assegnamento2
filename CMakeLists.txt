@@ -7,4 +7,4 @@ include_directories(.)
 
 add_executable(Assegnamento_2
         Train.cpp
-        Train.h TimeTable.cpp TimeTable.h main.cpp)
+        Train.h TimeTable.cpp TimeTable.h prove.cpp)
