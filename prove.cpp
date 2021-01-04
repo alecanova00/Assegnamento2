@@ -15,7 +15,7 @@ int main (void){
     
 
     string line;
-    ifstream myfile("line_description.txt");
+    ifstream myfile("../line_description.txt");
     string delimiter = "#";
 
 
