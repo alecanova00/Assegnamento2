@@ -1,6 +1,10 @@
+//
+// Created by Alessandro Visentin on 04/01/21.
+//
 #pragma once
 #include "Station.h"
 #include "TimeTable.h"
+#include "StationLink.h"
 class Train
 {
 	virtual void move();
@@ -16,16 +20,24 @@ class Train
 	virtual int get_remaining_time();
 protected:
 	Train();
+	virtual void start_from_station();
+	virtual bool is_arrived();
 	const int MAX_SPEED;
+	const int STATION_SPEED=80;
+	const int STATION_SAFE_DISTANCE = 5;
 	int CRUISE_SPEED;
 	int actual_speed;
 	int rail_position;
 	int delay;
 	TimeTable* table;
-	Station* actual_station;
-	Station* next_statiom;
+	StationLink* actual_station;
+	StationLink* next_station;
 	int next_station_distance;
+	int prev_station_distance;
 	Train_type type;
+	int train_number;
+	bool forward_direction;
+
 };
 
 enum class Train_type
