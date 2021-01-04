@@ -1,4 +1,6 @@
 #pragma once
+#include "Station.h"
+#include "TimeTable.h"
 class Train
 {
 	virtual void move();
@@ -19,9 +21,9 @@ protected:
 	int actual_speed;
 	int rail_position;
 	int delay;
-	Timetable table;
-	Station actual_station;
-	Station next_statiom;
+	TimeTable* table;
+	Station* actual_station;
+	Station* next_statiom;
 	int next_station_distance;
 	Train_type type;
 };
