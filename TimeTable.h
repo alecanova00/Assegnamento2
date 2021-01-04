@@ -23,16 +23,24 @@ static std::vector<int> timeConversion(int time){
 
 }
 
+enum StationType{
+    origine = 0, capolinea = 1
+};
+enum TrainType{
+    regionale = 1, alta_velocita = 2, alta_velocita_super = 3
+};
+
+
 class TrainTimeTable{
 private:
     int train;
-    int stationType;
-    int trainType;
+    StationType stationType;
+    TrainType trainType;
     std::vector<int> times;
     std::vector<int>* delays;
 public:
 
-    TrainTimeTable(int t, int st, int tt, std::vector<int> tm);
+    TrainTimeTable(int t, StationType st, TrainType tt, std::vector<int> tm);
 
     void setDelay(int delay, int station); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno

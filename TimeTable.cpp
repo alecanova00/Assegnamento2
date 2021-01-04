@@ -60,7 +60,7 @@ void TrainTimeTable::toString() const {
 }
 
 
-TrainTimeTable::TrainTimeTable(int t, int st, int tt, std::vector<int> tm) {
+TrainTimeTable::TrainTimeTable(int t, StationType st, TrainType tt, std::vector<int> tm) {
     train = t;
     stationType = st;
     trainType = tt;
