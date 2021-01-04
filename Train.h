@@ -1,5 +1,5 @@
-
-public class Train
+#pragma once
+class Train
 {
 	virtual void move();
 	virtual bool can_move();
@@ -26,7 +26,7 @@ protected:
 	Train_type type;
 };
 
-public enum Train_type
+enum class Train_type
 {
-	{Regional = 1, High_speed = 2, Super_high_speed = 3};
+	Regional = 1, High_speed = 2, Super_high_speed = 3;
 };

@@ -1,7 +1,8 @@
 #pragma once
 #include "Train.h"
-class Regional_train::public Train
+ class Regional_train:public Train
 {
+	Regional_train(int speed);
 	 void move();
 	 bool can_move();
 	 Train_type get_type();
@@ -23,5 +24,5 @@ private:
 	Station actual_station;
 	Station next_statiom;
 	int next_station_distance;
-	Train_type type=Tra;
+	Train_type type=Train_type::Regional;
 };
