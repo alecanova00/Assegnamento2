@@ -5,7 +5,6 @@
 #ifndef ASSEGNAMENTO_2_TIMETABLE_H
 #define ASSEGNAMENTO_2_TIMETABLE_H
 
-#include "Train.h"
 #include <vector>
 
 static std::vector<int> timeConversion(int time){
@@ -30,13 +29,14 @@ private:
     int stationType;
     int trainType;
     std::vector<int> times;
+    std::vector<int>* delays;
 public:
 
     TrainTimeTable(int t, int st, int tt, std::vector<int> tm);
 
-    void setOffset(); //imposta il ritardo
+    void setDelay(int delay, int station); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno
-
+    int getTrainNumber(){return train;}
     ~TrainTimeTable();
 };
 
@@ -46,7 +46,7 @@ private:
 public:
     TimeTable(std::string file);
     void chechOrari();
-    void setOffset(Train t); //imposta il ritardo
+    void setDelay(int train, int delay, int station); //imposta il ritardo
     void toString() const; //stampa l'intero tabellone
 
     ~TimeTable();
