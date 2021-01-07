@@ -2,7 +2,7 @@
 // Created by Alessandro Visentin on 04/01/21.
 //
 #include "Regional_train.h"
-Regional_train::Regional_train(int speed,const StationLink* stns, int nmb,bool forward)
+Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool forward)
 {
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
@@ -14,7 +14,7 @@ Regional_train::Regional_train(int speed,const StationLink* stns, int nmb,bool f
 		actual_station = stns;
 	else
 	{
-		actual_station=revert(stns);
+		actual_station = revert(stns);
 	}
 	train_number = nmb;
 	next_station = stns->get_next_link();
@@ -53,7 +53,7 @@ Regional_train::~Regional_train()
 void Regional_train::move() {
 	if (get_remaining_time() > 0)
 		return;
-	if (get_remaining_time() == 0)
+	if (get_remaining_time() <= 0)
 	{
 		if (actual_station != nullptr)
 			start_from_station();
@@ -65,37 +65,38 @@ void Regional_train::move() {
 			}
 			else
 				actual_speed = CRUISE_SPEED;
+			int covered_distance = actual_speed / 60;
+			prev_station_distance += covered_distance;
+			next_station_distance -= covered_distance;
 		}
-		else if (next_station_distance < STATION_SAFE_DISTANCE)
-			if (can_move())
+		else if (next_station_distance - actual_speed / 60 < STATION_SAFE_DISTANCE)
+		{
+			if (next_station_distance < STATION_SAFE_DISTANCE)
 			{
-				if (prev_station_distance < STATION_SAFE_DISTANCE)
-				{
-					if (STATION_SPEED < CRUISE_SPEED)
-					{
-						actual_speed = STATION_SPEED
-					}
-					else
-						actual_speed = CRUISE_SPEED;
-				}
+				int covered_distance = actual_speed / 60;
+				prev_station_distance += covered_distance;
+				next_station_distance -= covered_distance;
+				if (next_station_distance <= 0)
+					is_arrived();
 			}
-			else
+			else if (can_move())
 			{
-				delay++;
-				actual_speed = 0;
+				int direction = (forward_direction) ? 1 : 0;
+				actual_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
+				int covered_distance = actual_speed / 60;
+				prev_station_distance += covered_distance;
+				next_station_distance -= covered_distance;
+				if (next_station_distance <= 0)
+					is_arrived();
 			}
+		}
 		else
 		{
-			actual_speed = CRUISE_SPEED;
+			delay++;
+			actual_speed = 0;
+			next_station_distance = 5;
 		}
-		int covered_distance = actual_speed / 60;
-		prev_station_distance += covered_distance;
-		next_station_distance -= covered_distance;
 	}
-
-
-	
-	
 }
 bool Regional_train::can_move() {
 	if (forward_direction && next_station->get_station()->get_standard_rail_forward_status())
@@ -133,30 +134,37 @@ Station Regional_train::get_next_station()
 	return next_station->get_station();
 }
 int Regional_train::get_remaining_time() {
-	actual_station->get_station()
+	if (actual_station != nullptr)
+		return actual_station->get_station()->train_pause_time(train_number);
+	else return -1;
 }
 void Regional_train::start_from_station()
 {
 	if (actual_station->get_next_link() != nullptr)
 	{
 		next_station_distance = next_station->get_station()->get_station_distance() - actual_station->get_station()->get_station_distance();
+		actual_station->get_station()->free_train(train_number);
 		actual_station = nullptr;
+	}
+	else
+	{
+		actual_station = nullptr;
+		next_station = nullptr;
+		//return delay
 	}
 }
 bool Regional_train::is_arrived()
 {
-	if (next_station_distance <= 0)
-		actual_station = next_station;
+	actual_station = next_station;
 	prev_station_distance = 0;
 	next_station = actual_station->get_next_link();
-	actual_station->get_station()->//numero treno, 0 se forward, 1 se backward
 }
 
 vector<Station> Regional_train::get_train_path()
 {
 	StationLink* tmp = actual_station;
 	vector<Station> return_vector;
-	while (tmp!=nullptr)
+	while (tmp != nullptr)
 	{
 		return_vector.push_back(tmp);
 		tmp = tmp->get_next_link();

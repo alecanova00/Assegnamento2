@@ -20,6 +20,7 @@ class Train
 	virtual int get_remaining_time();
 protected:
 	Train();
+	~Train();
 	virtual void start_from_station();
 	virtual bool is_arrived();
 	const int MAX_SPEED;
