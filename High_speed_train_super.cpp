@@ -1,62 +1,65 @@
 //
 // Created by Alessandro Visentin on 04/01/21.
 //
-#include "Regional_train.h"
-Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool forward)
+#include "High_speed_train_super.h"
+High_speed_train_super::High_speed_train_super(int speed, const StationLink* stns, int nmb, bool forward)
 {
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
-	if (stns == nullptr)
+	if (tbl == nullptr)
+		throw new exception("Timetable is null!");
+	if (tbl == nullptr)
 		throw new exception("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
+	StationLink* tmp = pick(stns);
 	if (forward)
-		actual_station = stns;
+		actual_station = tmp;
 	else
 	{
-		actual_station = revert(stns);
+		actual_station = revert(tmp);
 	}
 	train_number = nmb;
-	next_station = stns->get_next_link();
+	next_station = tmp->get_next_link();
 	status = Train_status::Create;
 }
-Regional_train::Regional_train(const Regional_train& train) noexcept
+High_speed_train_super::High_speed_train_super(const High_speed_train_super& train) noexcept //?
 {
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
 	actual_station = train.actual_station;
-	next_station = train.next_station();
+	next_station = train.next_station;
 	status = train.status;
 }
-Regional_train::Regional_train(const Regional_train&& train) noexcept
+High_speed_train_super::High_speed_train_super(const High_speed_train_super&& train) noexcept
 {
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
 	actual_station = train.actual_station;
-	next_station = train.next_station();
+	next_station = train.next_station;
 	status = train.status;
 	delete train;
 }
-Regional_train& Regional_train::operator= (Regional_train& train)noexcept
+High_speed_train_super& High_speed_train_super::operator= (High_speed_train_super& train)noexcept
 {
-	Regional_train return_value{ train };
+	High_speed_train_super return_value{ train };
 	return *this;
 }
-Regional_train& Regional_train::operator= (Regional_train&& train)noexcept
+High_speed_train_super& High_speed_train_super::operator= (High_speed_train_super&& train)noexcept
 {
-	Regional_train return_value{ train };
+	High_speed_train_super return_value{ train };
 	delete train;
 	return *this;
 }
-Regional_train::~Regional_train()
+High_speed_train_super::~High_speed_train_super()
 {
 	actual_station = nullptr;
 	next_station = nullptr;
-	status == Train_status::Remove;
+	status = Train_status::Remove;
 	actual_speed = 0;
 }
-void Regional_train::move() {
-	if (status==Train_status::End || status==Train_status::Remove)
+void High_speed_train_super::move() {
+	if (status == Train_status::End || status == Train_status::Remove)
 		return;
 	if (get_remaining_time() <= 0)
 	{
@@ -71,7 +74,7 @@ void Regional_train::move() {
 		}
 		else if (next_station_distance - actual_speed / TIME_CONVERTER < STATION_SAFE_DISTANCE)
 		{
-			if (status==Train_status::Arriving)
+			if (status == Train_status::Arriving)
 			{
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
@@ -87,8 +90,8 @@ void Regional_train::move() {
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				status = Train_status::Arriving
-				if (next_station_distance <= 0)
-					is_arrived();
+					if (next_station_distance <= 0)
+						is_arrived();
 			}
 		}
 		else
@@ -102,3 +105,20 @@ void Regional_train::move() {
 }
 
 
+
+StationLink* High_speed_train_super::pick(StationLink* stns)
+{
+	StationLink* tmp = actual_station;
+	while (tmp->get_next_link() != nullptr)
+	{
+		if (tmp->get_station()->get_station_type() == 1)
+		{
+			tmp->get_previous_link()->set_next_link() = tmp->set_next_link();
+			tmp->get_next_link()->set_previous_link() = tmp->set_previous_link();
+			tmp = tmp->get_next_link();
+		}
+		if (tmp->get_next_link()->get_station()->get_station_type() == 1)
+			tmp->set_next_link() = nullptr;
+	}
+	return tmp;
+}
