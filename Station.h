@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Rail.h"
 
 using namespace std;
@@ -15,27 +16,18 @@ using namespace std;
 
 class Station{
 
-    string station_name; 
-    double station_distance;
-    Rail* standard_rail_forward;
-    Rail* standard_rail_backward;
-    
+    private:
 
-    public:
+        string station_name; 
+        double station_distance;
+        Rail* standard_rail_forward;
+        Rail* standard_rail_backward;
 
-        Station();
-        Station(string st,double sd);
-        ~Station();
+ 
+        vector<int> parking;
+        
 
-
-
-
-        void set_station_name(string sn);
-        void set_station_distance(double sd);
-
-        string get_station_name();
-        double get_station_distance();
-        int get_station_type();
+        
 
         bool get_standard_rail_forward_status(int index);
         bool get_standard_rail_backward_status(int index);
@@ -43,17 +35,48 @@ class Station{
         void set_standard_rail_forward_status(int index,bool status);
         void set_standard_rail_backward_status(bool status);
 
-        bool is_rail_free(int direction);
-
-        bool set_on_rail(int train_number,int direction);
-
-        int train_pause_time(int train_number);
-
-        void free_train(int train_number);
 
 
+    public:
 
-        //T* parkinglot;
+        
+
+        Station();
+        Station(string st,double sd);
+
+        
+
+
+        ~Station();
+
+
+
+
+        
+
+        string get_station_name();
+        double get_station_distance();
+        virtual int get_station_type();
+
+        bool is_rail_free(int direction);  //return true se libero
+
+        Rail* search_rail(int train_number, int direction);
+
+        bool set_on_rail(int train_number,int direction);  //return false se il binario non era libero
+
+
+
+        int train_pause_time(int train_number);  // return il tempo che manca se 0 si parte se -1 errore inaspettato
+
+        void free_train(Rail* r);
+
+        void set_on_parking(int train);
+
+        bool is_train_turn(int train);    //return true se il treno puo andare su un binario, viene tolto dal vector automaticamente
+
+
+
+        
 
 
 
@@ -61,23 +84,32 @@ class Station{
 
 };
 
+
+class PrimaryStation : public Station{
+
+    public:
+        PrimaryStation(string sn,double sd) : Station(sn,sd){};
+
+        int get_station_type() override;
+
+};
+
+
+
+
 class SecondaryStation : public Station{
 
-    bool transition_rail_forward;
-    bool transition_rail_backward;
+   
 
 
 
     public:
 
+        SecondaryStation(string sn,double sd):Station(sn,sd){};
 
-        int get_station_type();
+        int get_station_type() override;
+        
 
-        bool get_transition_rail_forward_status();
-        bool get_transition_rail_backward_status();
-
-        void set_transition_rail_forward_status(bool status);
-        void set_transition_rail_backward_status(bool status);
 
 };
 
