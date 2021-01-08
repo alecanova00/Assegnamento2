@@ -5,9 +5,9 @@
 
 bool Train::can_move()const
 {
-	if (forward_direction && next_station->get_station()->get_standard_rail_forward_status())
+	if (forward_direction && next_station->get_station()->is_rail_free(1))
 		return true;
-	if (!forward_direction && next_station->get_station()->get_standard_rail_backward_status())
+	if (!forward_direction && next_station->get_station()->is_rail_free(0))
 		return true;
 	return false;
 }
@@ -97,7 +97,9 @@ void Train::arrive()
 		actual_speed = 0;
 	}
 	else
+	{
 		status = Train_status::Station;
+	}
 }
 void Train::start_from_station()
 {

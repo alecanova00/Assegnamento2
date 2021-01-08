@@ -12,7 +12,7 @@ High_speed_train::High_speed_train(int speed, const StationLink* stns, int nmb, 
 		throw new exception("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
-	StationLink* tmp= pick(stns);
+	StationLink* tmp = pick(stns);
 	if (forward)
 		actual_station = tmp;
 	else
@@ -85,21 +85,37 @@ void High_speed_train::move() {
 			else if (can_move())
 			{
 				int direction = (forward_direction) ? 1 : 0;
-				actual_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
+				next_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				status = Train_status::Arriving;
-					if (next_station_distance <= 0)
-						is_arrived();
+				if (next_station_distance <= 0)
+					is_arrived();
 			}
 		}
 		else
 		{
-			delay++;
-			actual_speed = 0;
-			next_station_distance = STATION_SAFE_DISTANCE;
-			status = Train_status::Park;
+			if (status == Train_status::Move)
+			{
+				actual_speed = 0;
+				next_station_distance = STATION_SAFE_DISTANCE;
+				status = Train_status::Park;
+				next_station->get_station()->set_on_parking()
+			}
+			if (!next_station->get_station()->is_train_turn(train_number)
+				delay++;
+			else
+			{
+				int direction = (forward_direction) ? 1 : 0;
+					next_station->get_station()->set_on_rail(train_number, direction);
+					int covered_distance = actual_speed / TIME_CONVERTER;
+					prev_station_distance += covered_distance;
+					next_station_distance -= covered_distance;
+					status = Train_status::Arriving;
+					if (next_station_distance <= 0)
+						arrive();
+			}
 		}
 	}
 }
@@ -108,8 +124,8 @@ void High_speed_train::move() {
 
 StationLink* High_speed_train::pick(StationLink* stns)
 {
-	StationLink* tmp = actual_station;
-	while (tmp->get_next_link()!=nullptr)
+	StationLink* tmp = stns;
+	while (tmp->get_next_link() != nullptr)
 	{
 		if (tmp->get_station()->get_station_type() == 1)
 		{

@@ -85,7 +85,7 @@ void High_speed_train_super::move() {
 			else if (can_move())
 			{
 				int direction = (forward_direction) ? 1 : 0;
-				actual_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
+				next_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
@@ -96,10 +96,14 @@ void High_speed_train_super::move() {
 		}
 		else
 		{
-			delay++;
-			actual_speed = 0;
-			next_station_distance = STATION_SAFE_DISTANCE;
-			status = Train_status::Park;
+			int direction = (forward_direction) ? 1 : 0;
+			next_station->get_station()->set_on_rail(train_number, direction);
+			int covered_distance = actual_speed / TIME_CONVERTER;
+			prev_station_distance += covered_distance;
+			next_station_distance -= covered_distance;
+			status = Train_status::Arriving;
+			if (next_station_distance <= 0)
+				arrive();
 		}
 	}
 }
@@ -108,7 +112,7 @@ void High_speed_train_super::move() {
 
 StationLink* High_speed_train_super::pick(StationLink* stns)
 {
-	StationLink* tmp = actual_station;
+	StationLink* tmp = stns;
 	while (tmp->get_next_link() != nullptr)
 	{
 		if (tmp->get_station()->get_station_type() == 1)

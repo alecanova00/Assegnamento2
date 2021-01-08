@@ -56,7 +56,7 @@ Regional_train::~Regional_train()
 	actual_speed = 0;
 }
 void Regional_train::move() {
-	if (status==Train_status::End || status==Train_status::Remove)
+	if (status == Train_status::End || status == Train_status::Remove)
 		return;
 	if (get_remaining_time() <= 0)
 	{
@@ -71,32 +71,49 @@ void Regional_train::move() {
 		}
 		else if (next_station_distance - actual_speed / TIME_CONVERTER < STATION_SAFE_DISTANCE)
 		{
-			if (status==Train_status::Arriving)
+			if (status == Train_status::Arriving)
 			{
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				if (next_station_distance <= 0)
-					is_arrived();
+					arrive();
 			}
 			else if (can_move())
 			{
 				int direction = (forward_direction) ? 1 : 0;
-				actual_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
+				next_station->get_station()->set_on_rail(train_number, direction);
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
-				status = Train_status::Arriving
+				status = Train_status::Arriving;
 				if (next_station_distance <= 0)
-					is_arrived();
+					arrive();
 			}
 		}
 		else
 		{
-			delay++;
-			actual_speed = 0;
-			next_station_distance = STATION_SAFE_DISTANCE;
-			status = Train_status::Park;
+			if (status == Train_status::Move)
+			{
+				actual_speed = 0;
+				next_station_distance = STATION_SAFE_DISTANCE;
+				status = Train_status::Park;
+				next_station->get_station()->set_on_parking()
+			}
+			if (!next_station->get_station()->is_train_turn(train_number)
+				delay++;
+			else
+			{
+				int direction = (forward_direction) ? 1 : 0;
+					next_station->get_station()->set_on_rail(train_number, direction);
+					int covered_distance = actual_speed / TIME_CONVERTER;
+					prev_station_distance += covered_distance;
+					next_station_distance -= covered_distance;
+					status = Train_status::Arriving;
+					if (next_station_distance <= 0)
+						arrive();
+			}
+
 		}
 	}
 }
