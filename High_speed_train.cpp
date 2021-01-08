@@ -89,7 +89,7 @@ void High_speed_train::move() {
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
-				status = Train_status::Arriving
+				status = Train_status::Arriving;
 					if (next_station_distance <= 0)
 						is_arrived();
 			}
