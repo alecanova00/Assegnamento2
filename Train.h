@@ -10,9 +10,7 @@
 class Train
 {
 public:
-	virtual void move() abstract;
-	Train_type get_type()const;
-	 int get_max_speed() const;
+	virtual void move()=0;
 	int get_cruise_speed()const;
 	int get_actual_speed()const;
 	int get_train_number()const;
@@ -28,7 +26,6 @@ protected:
 	Train();
 	~Train();
 	void start_from_station();
-	const int MAX_SPEED;
 	static const int STATION_SPEED = 80;
 	static const int STATION_SAFE_DISTANCE = 5;
 	static const int TIME_CONVERTER = 60;
@@ -40,14 +37,12 @@ protected:
 	StationLink* next_station;
 	int next_station_distance;
 	int prev_station_distance;
-	Train_type type;
 	Train_status status;
 	int train_number;
 	bool forward_direction;
 	bool can_move() const;
 	void arrive();
 	StationLink* revert(const StationLink* stns);
-	void arrive();
 };
 #endif // !Train
 

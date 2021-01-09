@@ -6,9 +6,7 @@ High_speed_train::High_speed_train(int speed, const StationLink* stns, int nmb, 
 {
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
-	if (tbl == nullptr)
-		throw new exception("Timetable is null!");
-	if (tbl == nullptr)
+	if (stns == nullptr)
 		throw new exception("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
@@ -20,16 +18,37 @@ High_speed_train::High_speed_train(int speed, const StationLink* stns, int nmb, 
 		actual_station = revert(tmp);
 	}
 	train_number = nmb;
-	next_station = tmp->get_next_link();
+	next_station = actual_station->get_next_link();
 	status = Train_status::Create;
 }
-High_speed_train::High_speed_train(const High_speed_train& train) noexcept //?
+High_speed_train::High_speed_train(int speed,  StationLink stns, int nmb, bool forward)
+{
+	if (speed > MAX_SPEED)
+		throw new exception("Train's max speed in lower!");
+	if (stns.get_station() == nullptr)
+		throw new exception("The stations' list is null!");
+	CRUISE_SPEED = speed;
+	actual_speed = 0;
+	StationLink* tmp = pick(&stns);
+	if (forward)
+		actual_station = tmp;
+	else
+	{
+		actual_station = revert(tmp);
+	}
+	train_number = nmb;
+	next_station = actual_station->get_next_link();
+	status = Train_status::Create;
+}
+High_speed_train::High_speed_train(const High_speed_train& train) noexcept 
 {
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
 	actual_station = train.actual_station;
 	next_station = train.next_station;
 	status = train.status;
+	delay = train.delay;
+	forward_direction = train.forward_direction; //
 }
 High_speed_train::High_speed_train(const High_speed_train&& train) noexcept
 {
@@ -38,7 +57,9 @@ High_speed_train::High_speed_train(const High_speed_train&& train) noexcept
 	actual_station = train.actual_station;
 	next_station = train.next_station;
 	status = train.status;
-	delete train;
+	delay = train.delay;
+	forward_direction = train.forward_direction; //
+	delete &train;
 }
 High_speed_train& High_speed_train::operator= (High_speed_train& train)noexcept
 {
@@ -48,7 +69,7 @@ High_speed_train& High_speed_train::operator= (High_speed_train& train)noexcept
 High_speed_train& High_speed_train::operator= (High_speed_train&& train)noexcept
 {
 	High_speed_train return_value{ train };
-	delete train;
+	delete &train;
 	return *this;
 }
 High_speed_train::~High_speed_train()
@@ -80,18 +101,18 @@ void High_speed_train::move() {
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				if (next_station_distance <= 0)
-					is_arrived();
+					arrive();
 			}
 			else if (can_move())
 			{
 				int direction = (forward_direction) ? 1 : 0;
-				next_station->get_station()->set_on_rail(train_number, direction);   //calculate delay
+				next_station->get_station()->set_on_rail(train_number, direction);
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				status = Train_status::Arriving;
 				if (next_station_distance <= 0)
-					is_arrived();
+					arrive();
 			}
 		}
 		else
@@ -101,40 +122,39 @@ void High_speed_train::move() {
 				actual_speed = 0;
 				next_station_distance = STATION_SAFE_DISTANCE;
 				status = Train_status::Park;
-				next_station->get_station()->set_on_parking()
+				next_station->get_station()->set_on_parking(train_number);
 			}
-			if (!next_station->get_station()->is_train_turn(train_number)
+			if (!next_station->get_station()->is_train_turn(train_number))
 				delay++;
 			else
 			{
 				int direction = (forward_direction) ? 1 : 0;
-					next_station->get_station()->set_on_rail(train_number, direction);
-					int covered_distance = actual_speed / TIME_CONVERTER;
-					prev_station_distance += covered_distance;
-					next_station_distance -= covered_distance;
-					status = Train_status::Arriving;
-					if (next_station_distance <= 0)
-						arrive();
+				next_station->get_station()->set_on_rail(train_number, direction);
+				int covered_distance = actual_speed / TIME_CONVERTER;
+				prev_station_distance += covered_distance;
+				next_station_distance -= covered_distance;
+				status = Train_status::Arriving;
+				if (next_station_distance <= 0)
+					arrive();
 			}
+
 		}
 	}
 }
 
-
-
-StationLink* High_speed_train::pick(StationLink* stns)
+StationLink* High_speed_train::pick(const StationLink* stns)
 {
-	StationLink* tmp = stns;
+	StationLink* tmp = new StationLink(*stns);
 	while (tmp->get_next_link() != nullptr)
 	{
 		if (tmp->get_station()->get_station_type() == 1)
 		{
-			tmp->get_previous_link()->set_next_link() = tmp->set_next_link();
-			tmp->get_next_link()->set_previous_link() = tmp->set_previous_link();
+			tmp->get_previous_link()->set_next_link(tmp->get_next_link());
+			tmp->get_next_link()->set_previous_link(tmp->get_previous_link());
 			tmp = tmp->get_next_link();
 		}
 		if (tmp->get_next_link()->get_station()->get_station_type() == 1)
-			tmp->set_next_link() = nullptr;
+			tmp->set_next_link(nullptr);
 	}
 	return tmp;
 }

@@ -11,14 +11,6 @@ bool Train::can_move()const
 		return true;
 	return false;
 }
-Train_type Train::get_type()const
-{
-	return type;
-}
-int Train::get_max_speed()const
-{
-	return MAX_SPEED;
-}
 int Train::get_cruise_speed()const
 {
 	return CRUISE_SPEED;
@@ -57,7 +49,7 @@ Train_status Train::get_status()const
 {
 	return status;
 }
-Train::Train():MAX_SPEED{0}
+Train::Train()
 {
 }
 Train::~Train()

@@ -6,13 +6,15 @@
  class High_speed_train:public Train
 {
 	High_speed_train(int speed, StationLink stns, int nmb, bool forward);
+	High_speed_train(int speed,const StationLink* stns, int nmb, bool forward);
 	High_speed_train(const High_speed_train& train) noexcept;
 	High_speed_train(const High_speed_train&& train) noexcept;
 	High_speed_train& operator= (High_speed_train& train)noexcept;
 	High_speed_train& operator= (High_speed_train&& train)noexcept;
 	~High_speed_train();
+	void move();
+	static const int MAX_SPEED = 240;
+	static const Train_type TYPE = Train_type::High_speed;
 private:
-	const int MAX_SPEED = 240;
-	Train_type type = Train_type::High_speed_train;
-	StationLink* High_speed_train::pick(const StationLink* stns)
+	StationLink* pick(const StationLink* stns);
 };
