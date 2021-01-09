@@ -11,13 +11,31 @@ Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
 	if (forward)
-		actual_station = stns;
+		actual_station = new StationLink(*(stns));
 	else
 	{
 		actual_station = revert(stns);
 	}
 	train_number = nmb;
-	next_station = stns->get_next_link();
+	next_station = actual_station->get_next_link();
+	status = Train_status::Create;
+}
+Regional_train::Regional_train(int speed, StationLink stns, int nmb, bool forward)
+{
+	if (speed > MAX_SPEED)
+		throw new exception("Train's max speed in lower!");
+	if (stns.get_station() == nullptr)
+		throw new exception("The stations' list is null!");
+	CRUISE_SPEED = speed;
+	actual_speed = 0;
+	if (forward)
+		actual_station = &stns;
+	else
+	{
+		actual_station = revert(&stns);
+	}
+	train_number = nmb;
+	next_station = actual_station->get_next_link();
 	status = Train_status::Create;
 }
 Regional_train::Regional_train(const Regional_train& train) noexcept
@@ -25,7 +43,7 @@ Regional_train::Regional_train(const Regional_train& train) noexcept
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
 	actual_station = train.actual_station;
-	next_station = train.next_station();
+	next_station = train.next_station;
 	status = train.status;
 }
 Regional_train::Regional_train(const Regional_train&& train) noexcept
@@ -33,20 +51,20 @@ Regional_train::Regional_train(const Regional_train&& train) noexcept
 	CRUISE_SPEED = train.CRUISE_SPEED;
 	actual_speed = train.actual_speed;
 	actual_station = train.actual_station;
-	next_station = train.next_station();
+	next_station = train.next_station;
 	status = train.status;
-	delete train;
+	delete &train;
 }
 Regional_train& Regional_train::operator= (Regional_train& train)noexcept
 {
 	Regional_train return_value{ train };
-	return *this;
+	return return_value;
 }
 Regional_train& Regional_train::operator= (Regional_train&& train)noexcept
 {
 	Regional_train return_value{ train };
-	delete train;
-	return *this;
+	delete &train;
+	return return_value;
 }
 Regional_train::~Regional_train()
 {
@@ -58,7 +76,7 @@ Regional_train::~Regional_train()
 void Regional_train::move() {
 	if (status == Train_status::End || status == Train_status::Remove)
 		return;
-	if (get_remaining_time() <= 0)
+	if (get_remaining_time()<=0)
 	{
 		if (status == Train_status::Station)
 			start_from_station();
@@ -98,9 +116,9 @@ void Regional_train::move() {
 				actual_speed = 0;
 				next_station_distance = STATION_SAFE_DISTANCE;
 				status = Train_status::Park;
-				next_station->get_station()->set_on_parking()
+				next_station->get_station()->set_on_parking(train_number);
 			}
-			if (!next_station->get_station()->is_train_turn(train_number)
+			if (!next_station->get_station()->is_train_turn(train_number))
 				delay++;
 			else
 			{
@@ -117,5 +135,6 @@ void Regional_train::move() {
 		}
 	}
 }
+
 
 

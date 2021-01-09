@@ -29,7 +29,7 @@ int Train::get_actual_speed()const
 }
 int Train::get_train_number()const
 {
-	return train_number();
+	return train_number;
 }
 int Train::get_delay() const 
 {
@@ -38,13 +38,13 @@ int Train::get_delay() const
 Station Train::get_actual_station() const 
 {
 	if (status != Train_status::End)
-		return actual_station->get_station();
+		return *(actual_station->get_station());
 	throw exception{ "The train's path is ended" };
 }
 Station Train::get_next_station()const
 {
 	if (status != Train_status::End)
-		return next_station->get_station();
+		return *(next_station->get_station());
 	throw exception{ "The train's path is ended" };
 }
 int Train::get_remaining_time()const
@@ -53,16 +53,28 @@ int Train::get_remaining_time()const
 		return actual_station->get_station()->train_pause_time(train_number);
 	else return -1;
 }
+Train_status Train::get_status()const
+{
+	return status;
+}
+Train::Train():MAX_SPEED{0}
+{
+}
+Train::~Train()
+{
+}
 StationLink* Train::revert(const StationLink* stns)
 {
-	while (stns->get_next_link() != nullptr)stns = stns->get_next_link();
-	StationLink* tmp;
-	while (stns->get_previous_link() != nullptr)
+	StationLink* tmp=new StationLink(*(stns));
+	while (tmp->get_next_link() != nullptr)tmp = tmp->get_next_link();
+	StationLink* return_pointer;
+	while (tmp->get_previous_link() != nullptr)
 	{
-		tmp->set_next_link() = stns->get_previous_link();
-		tmp->set_previous_link() = stns->get_next_link();
+		return_pointer->set_next_link(return_pointer->get_previous_link());
+		return_pointer->set_previous_link(return_pointer->get_next_link());
 	}
-	return tmp;
+	delete tmp;
+	return return_pointer;
 }
 
 vector<Station> Train::get_train_path()
@@ -71,12 +83,13 @@ vector<Station> Train::get_train_path()
 	vector<Station> return_vector;
 	while (tmp != nullptr)
 	{
-		return_vector.push_back(tmp);
+		return_vector.push_back(*(tmp->get_station()));
 		tmp = tmp->get_next_link();
 	}
 	delete tmp;
 	return return_vector;
 }
+
 bool Train::is_arrived()const
 {
 	return status == Train_status::Station;
@@ -105,8 +118,15 @@ void Train::start_from_station()
 {
 	if (actual_station->get_next_link() != nullptr)
 	{
-		Station next = actual_station->get_next_link()->get_station();
 		next_station_distance = next_station->get_station()->get_station_distance() - actual_station->get_station()->get_station_distance();
+		prev_station_distance = 0;
 		actual_station = nullptr;
+		status = Train_status::Move;
+	}
+	else 
+	{
+		status = Train_status::End;
+		actual_station = nullptr;
+		actual_speed = 0;
 	}
 }
