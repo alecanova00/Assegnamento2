@@ -11,22 +11,6 @@ bool Train::can_move()const
 		return true;
 	return false;
 }
-int Train::get_cruise_speed()const
-{
-	return CRUISE_SPEED;
-}
-int Train::get_actual_speed()const
-{
-	return actual_speed;
-}
-int Train::get_train_number()const
-{
-	return train_number;
-}
-int Train::get_delay() const 
-{
-	return delay;
-}
 Station Train::get_actual_station() const 
 {
 	if (status != Train_status::End)
@@ -44,10 +28,6 @@ int Train::get_remaining_time()const
 	if (status == Train_status::Station)
 		return actual_station->get_station()->train_pause_time(train_number);
 	else return -1;
-}
-Train_status Train::get_status()const
-{
-	return status;
 }
 Train::Train()
 {
@@ -69,7 +49,7 @@ StationLink* Train::revert(const StationLink* stns)
 	return return_pointer;
 }
 
-vector<Station> Train::get_train_path()
+vector<Station> Train::get_train_path() const 
 {
 	StationLink* tmp = actual_station;
 	vector<Station> return_vector;
@@ -82,14 +62,6 @@ vector<Station> Train::get_train_path()
 	return return_vector;
 }
 
-bool Train::is_arrived()const
-{
-	return status == Train_status::Station;
-}
-bool Train::is_ended()const
-{
-	return status == Train_status::End;
-}
 void Train::arrive()
 {
 	actual_station = next_station;

@@ -2,4 +2,4 @@
 enum class Train_status {
 	Move, Park, Station, End, Create, Arriving, Remove
 };
-#endif // !Train_status#pragma once
+#endif // !Train_status

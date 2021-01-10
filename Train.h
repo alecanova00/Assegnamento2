@@ -11,17 +11,17 @@ class Train
 {
 public:
 	virtual void move()=0;
-	int get_cruise_speed()const;
-	int get_actual_speed()const;
-	int get_train_number()const;
-	int get_delay()const;
+	inline int get_cruise_speed() const { return CRUISE_SPEED; }
+	inline int get_actual_speed() const { return actual_speed; }
+	inline int get_train_number() const { return train_number; }
+	inline int get_delay()const { return delay; }
+	inline Train_status get_status()const { return status; }
 	Station get_actual_station()const;
 	Station get_next_station()const;
 	int get_remaining_time()const;
-	bool is_arrived()const;
-	bool is_ended()const;
-	vector<Station> get_train_path();
-	Train_status get_status()const;
+	bool is_arrived()const { return status == Train_status::Station; }
+	bool is_ended()const { return status == Train_status::End; }
+	vector<Station> get_train_path()const;
 protected:
 	Train();
 	~Train();
@@ -31,7 +31,6 @@ protected:
 	static const int TIME_CONVERTER = 60;
 	int CRUISE_SPEED;
 	int actual_speed;
-	int rail_position;
 	int delay;
 	StationLink* actual_station;
 	StationLink* next_station;
