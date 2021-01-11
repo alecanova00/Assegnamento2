@@ -9,6 +9,7 @@
 #include <list>
 #include <string>
 #include "Train.h"
+#include "Train_type.h"
 
 static std::string timeConversion(int time){
     std::string h; std::string m;
@@ -34,7 +35,7 @@ class TrainTimeTable{
 private:
     int train;
     StationType stationType;
-    TrainType trainType;
+    Train_type trainType;
     std::vector<int> times;
     std::vector<int>* delays;
 public:
@@ -43,11 +44,14 @@ public:
 
     void setDelay(int delay, int station); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno
+
     int getTrainNumber(){return train;}
+    Train_type getTrainType(){return trainType;}
+    StationType getStationType(){return stationType;}
     std::vector<int> getTimes(){return times;}
     std::vector<int>* getDelays(){return delays;}
-    void set_time (const int , const int);
-    int get_time(const int);
+    void setTime (const int , const int);
+    int getTime(const int);
     void setTimes(const std::vector<int>*);
     ~TrainTimeTable();
 };
@@ -60,6 +64,10 @@ public:
     void chechOrari(std::list<Train>*);
     void setDelay(int train, int delay, int station); //imposta il ritardo
     void toString() const; //stampa l'intero tabellone
+
+    int getTrainNumber(const int train) {return ttt[train].getTrainNumber();};
+    Train_type getTrainType(int train) { return ttt[train].getTrainType(); };
+    StationType getStationType(int train) { return ttt[train].getStationType(); };
 
     int getArriveTime(const int train, const int station);
 
