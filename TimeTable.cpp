@@ -24,7 +24,7 @@ TimeTable::TimeTable(std::string file) {
             line.erase(0,token.length()+1);
 
             token = line.substr(0,line.find(delimiter));
-            TrainType traintype = static_cast<TrainType>(stoi(token));
+            Train_type traintype = static_cast<Train_type>(stoi(token));
             line.erase(0,token.length()+1);
 
             vector<int> times;
@@ -65,7 +65,7 @@ void TrainTimeTable::toString() const {
 }
 
 
-TrainTimeTable::TrainTimeTable(int t, StationType st, TrainType tt, std::vector<int> tm) {
+TrainTimeTable::TrainTimeTable(int t, StationType st, Train_type tt, std::vector<int> tm) {
     train = t;
     stationType = st;
     trainType = tt;

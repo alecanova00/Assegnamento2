@@ -5,22 +5,32 @@
 #include <algorithm>
 #include <vector>
 #include <list>
-#include "StationLink.h"
+
+#include "High_speed_train.h"
+#include "High_speed_train_super.h"
+#include "Regional_train.h"
+#include "TimeTable.h"
+
+
+
+
 
 
 using namespace std;
 
 
-string const FILE_NAME = "line_description.txt";
+string const STATION_FILE_NAME = "./line_description.txt";
+string const TIMETABLE_FILE_NAME = "./timetables.txt";
+
 string const FILE_DELIMITER = "#";
 
 
 
 
-int file_size(){
+int station_file_size(){
     
     string line;
-    ifstream myfile(FILE_NAME);
+    ifstream myfile(STATION_FILE_NAME);
     
     myfile.exceptions (ifstream::badbit);
 
@@ -46,13 +56,11 @@ int file_size(){
     
 }
 
-
-
-StationLink* read_file(){
+StationLink* read_station_file(){
     string line;
-    ifstream myfile(FILE_NAME);
+    ifstream myfile(STATION_FILE_NAME);
     myfile.exceptions (ifstream::badbit);
-    int fsize = file_size();
+    int fsize = station_file_size();
 
     StationLink* sl = nullptr;
     StationLink* first = nullptr;
@@ -120,34 +128,89 @@ StationLink* read_file(){
 
 }
 
-void print(string s){
-    cout << s << "\n";
-}
-void print(double s){
-    cout << s << "\n";
-}
-void print(int s){
-    cout << s << "\n";
-}
-void print(bool s){
-    cout << s << "\n";
-}
 
 
 int main (void){
 
+    StationLink* first = read_station_file();
+
+    TimeTable timetable(TIMETABLE_FILE_NAME);
 
 
-    vector<int> trains(15);
 
-    for(int i = 0; i < 15; i++){
-        trains[i] = i;
+
+
+
+    list<Train> trains(timetable.getTimeTableSize());
+
+   
+    for(int i = 0; i != trains.size(); i++){
+
+        if(timetable.getTrainType(i) == Train_type::Regional){
+
+            trains.push_back(Regional_train(120,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
+
+        }
+        else if(timetable.getTrainType(i) == Train_type::High_speed){
+
+            trains.push_back(High_speed_train(200,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
+
+        }
+
+        else{
+
+            trains.push_back(High_speed_train_super(280,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
+
+        }
+
+        
     }
+
+    timetable.toString();
+
+    timetable.chechOrari(&trains);
+
+    cout << "\n\n\n";
+
+    timetable.toString();
+
+
+
+
+
+
+/*
+    int tempo = 0;
+
+    while(tempo <= 1440){
+        
+        
+
+
+
+
+
+
+
+    }
+
+
+*/
+
+    
+
+
+
+
+
+
+
+
     
     
     
-    StationLink* first = read_file(); // non va mai modificato perchè bisogna conoscere sempre il primo
-    StationLink* sl = first;
+     // non va mai modificato perchè bisogna conoscere sempre il primo
+    /*StationLink* sl = first;
     
     while(sl != 0){     //modo per far scorrere l'intera lista
  
@@ -156,7 +219,7 @@ int main (void){
         cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
         sl = sl->get_next_link();
         
-    }
+    }*/
     
 
 
