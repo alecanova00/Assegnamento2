@@ -118,13 +118,13 @@ void TimeTable::chechOrari(list<Train>* lista) {
                     for(int m=ttt[j].getTimes().size(); m < stations.size(); m++){
                         int distanceBetweenStations = stations[m].get_station_distance()-stations[m-1].get_station_distance();
                         int time = (int)(distanceBetweenStations/speed)+10; //10 sta per il margine
-                        updatedTimes.push_back(ttt[j].get_time(m-1)+time);
+                        updatedTimes.push_back(ttt[j].getTime(m-1)+time);
                     }
                     ttt[j].setTimes(&updatedTimes);
                 }else if (ttt[j].getTimes().size() > stations.size()){ //caso in cui ho un eccesso di orari
                     vector<int> cuttedTimes (stations.size());
                     for(int m =0; m< stations.size(); m++){
-                        cuttedTimes[m] = ttt[j].get_time(m);
+                        cuttedTimes[m] = ttt[j].getTime(m);
                     }
                     ttt[j].setTimes(&cuttedTimes);
                 }
@@ -140,7 +140,7 @@ void TimeTable::chechOrari(list<Train>* lista) {
 
                     int predicted_time = ttt[j].getTimes()[ij + 1] - ttt[j].getTimes()[ij]; //tempo scritto negli orari
                     if (time != predicted_time) { //se il tempo scritto e quello calcolato sono diversi
-                        ttt[j].set_time(ttt[j].get_time(ij) + time, ij + 1); //cambio l'orario in memoria con quello aggiornato
+                        ttt[j].setTime(ttt[j].getTime(ij) + time, ij + 1); //cambio l'orario in memoria con quello aggiornato
                     }
                 }
             }
@@ -163,11 +163,11 @@ void TrainTimeTable::setTimes(const std::vector<int> * updatedTimes) {
     }
 }
 
-void TrainTimeTable::set_time(const int updated_time, const int station) {
+void TrainTimeTable::setTime(const int updated_time, const int station) {
     times[station] = updated_time;
 }
 
-int TrainTimeTable::get_time(const int station) {
+int TrainTimeTable::getTime(const int station) {
     return times[station];
 }
 
@@ -180,5 +180,5 @@ TimeTable::~TimeTable() {
 }
 
 int TimeTable::getArriveTime(const int train, const int station) {
-    return ttt[train].get_time(station);
+    return ttt[train].getTime(station);
 }
