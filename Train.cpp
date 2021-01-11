@@ -15,13 +15,13 @@ Station Train::get_actual_station() const
 {
 	if (status != Train_status::End)
 		return *(actual_station->get_station());
-	throw exception{ "The train's path is ended" };
+	throw Error{ "The train's path is ended" };
 }
 Station Train::get_next_station()const
 {
 	if (status != Train_status::End)
 		return *(next_station->get_station());
-	throw exception{ "The train's path is ended" };
+	throw Error{ "The train's path is ended" };
 }
 int Train::get_remaining_time()const
 {
@@ -95,5 +95,14 @@ void Train::start_from_station()
 		actual_station = nullptr;
 		actual_speed = 0;
 	}
+}
+
+Error::Error(string msg)
+{
+	message = msg;
+}
+string Error::get_message()
+{
+	return message;
 }
 

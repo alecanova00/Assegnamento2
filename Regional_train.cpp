@@ -9,11 +9,11 @@ Regional_train::Regional_train()
 Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool forward)
 {
 	if (speed <= 0)
-		throw new exception("Train's max speed in negative or null!");
+		throw Error("Train's max speed in negative or null!");
 	if (speed > MAX_SPEED)
-		throw new exception("Train's max speed in lower!");
+		throw Error("Train's max speed in lower!");
 	if (stns == nullptr)
-		throw new exception("The stations' list is null!");
+		throw Error("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
 	if (forward)
@@ -29,11 +29,11 @@ Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool
 Regional_train::Regional_train(int speed, StationLink stns, int nmb, bool forward)
 {
 	if (speed <= 0)
-		throw new exception("Train's max speed in negative or null!");
+		throw Error("Train's max speed in negative or null!");
 	if (speed > MAX_SPEED)
-		throw new exception("Train's max speed in lower!");
+		throw Error("Train's max speed in lower!");
 	if (stns.get_station() == nullptr)
-		throw new exception("The stations' list is null!");
+		throw Error("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
 	if (forward)
