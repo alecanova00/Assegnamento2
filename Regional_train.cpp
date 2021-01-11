@@ -70,7 +70,7 @@ Regional_train::~Regional_train()
 {
 	actual_station = nullptr;
 	next_station = nullptr;
-	status == Train_status::Remove;
+	status = Train_status::Remove;
 	actual_speed = 0;
 }
 void Regional_train::move() {

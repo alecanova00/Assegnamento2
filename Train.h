@@ -5,7 +5,6 @@
 #define TRAIN_H
 #include "Train_type.h"
 #include "Train_status.h"
-#include "Station.h"
 #include "StationLink.h"
 #include "vector"
 class Train

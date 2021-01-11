@@ -29,7 +29,8 @@ int Train::get_remaining_time()const
 		return actual_station->get_station()->train_pause_time(train_number);
 	else return -1;
 }
-Train::Train()
+Train::Train():CRUISE_SPEED{0},actual_speed{0},actual_station{nullptr},next_station{nullptr},delay{0},
+forward_direction{true},next_station_distance{0},prev_station_distance{0},status{Train_status::Create},train_number{0}
 {
 }
 Train::~Train()
@@ -39,7 +40,8 @@ StationLink* Train::revert(const StationLink* stns)
 {
 	StationLink* tmp=new StationLink(*(stns));
 	while (tmp->get_next_link() != nullptr)tmp = tmp->get_next_link();
-	StationLink* return_pointer;
+	StationLink* return_pointer=tmp;
+	return_pointer->set_next_link(nullptr);
 	while (tmp->get_previous_link() != nullptr)
 	{
 		return_pointer->set_next_link(return_pointer->get_previous_link());
