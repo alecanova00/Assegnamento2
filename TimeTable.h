@@ -22,11 +22,11 @@ static std::string timeConversion(int time){
     m+=std::to_string(minutes);
     return h+":"+m;
 }
-
+/*
 enum StationType{
     origine = 0, capolinea = 1
 };
-/*enum TrainType{
+enum TrainType{
     regionale = 1, alta_velocita = 2, alta_velocita_super = 3
 };*/
 
@@ -34,20 +34,20 @@ enum StationType{
 class TrainTimeTable{
 private:
     int train;
-    StationType stationType;
+    int stationType;
     Train_type trainType;
     std::vector<int> times;
     std::vector<int>* delays;
 public:
 
-    TrainTimeTable(int t, StationType st, Train_type tt, std::vector<int> tm);
+    TrainTimeTable(int t, int st, Train_type tt, std::vector<int> tm);
 
     void setDelay(int delay, int station); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno
 
     int getTrainNumber(){return train;}
     Train_type getTrainType(){return trainType;}
-    StationType getStationType(){return stationType;}
+    int getStationType(){return stationType;}
     std::vector<int> getTimes(){return times;}
     std::vector<int>* getDelays(){return delays;}
     void setTime (const int , const int);
@@ -67,7 +67,7 @@ public:
 
     int getTrainNumber(const int train) {return ttt[train].getTrainNumber();};
     Train_type getTrainType(int train) { return ttt[train].getTrainType(); };
-    StationType getStationType(int train) { return ttt[train].getStationType(); };
+    int getStationType(int train) { return ttt[train].getStationType(); };
     int getTimeTableSize(){return ttt.size();}
 
     int getArriveTime(const int train, const int station);

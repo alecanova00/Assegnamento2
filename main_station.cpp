@@ -24,7 +24,9 @@ string const TIMETABLE_FILE_NAME = "./timetables.txt";
 
 string const FILE_DELIMITER = "#";
 
-
+void print(string s){
+    cout<<s<<"\n";
+}
 
 
 int station_file_size(){
@@ -128,26 +130,74 @@ StationLink* read_station_file(){
 
 }
 
+StationLink* invert_station_link(StationLink* first){
+
+    StationLink* sl = first;
+
+    while(sl->get_next_link() != 0){     //modo per far scorrere l'intera lista
+
+        sl = sl->get_next_link();
+        
+    }
+
+    while(sl->get_next_link() != 0){
+
+        sl->set_next_link(sl->get_previous_link());
+        sl->set_previous_link(nullptr);
+        sl = sl->get_next_link();
+    }
+
+    return sl;
+
+}
 
 
 int main (void){
 
+    //print("1");
     StationLink* first = read_station_file();
+    StationLink* last = invert_station_link(read_station_file());
 
+    StationLink* sl = first;
+
+    while(sl != 0){     //modo per far scorrere l'intera lista
+        cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
+        cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
+        cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
+
+
+        sl = sl->get_next_link();
+        
+    }
+
+/*
+    sl = last;
+    while(sl != 0){     //modo per far scorrere l'intera lista
+        cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
+        cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
+        cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
+
+        sl = sl->get_next_link();
+        
+    }
+    */
+    
+    
+ 
     TimeTable timetable(TIMETABLE_FILE_NAME);
 
 
 
-
-
-
-    list<Train> trains(timetable.getTimeTableSize());
-
    
-    for(int i = 0; i != trains.size(); i++){
 
+
+    list<Train> trains;
+    
+   
+    for(int i = 0; i <= timetable.getTimeTableSize(); i++){
+      
         if(timetable.getTrainType(i) == Train_type::Regional){
-
+            
             trains.push_back(Regional_train(120,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
 
         }
@@ -162,18 +212,24 @@ int main (void){
             trains.push_back(High_speed_train_super(280,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
 
         }
-
+      
         
     }
+   
 
+    //cout << "\n"<<trains.front().get_train_number();
+
+
+
+    
     timetable.toString();
-
+    print("8");
     timetable.chechOrari(&trains);
-
+print("9");
     cout << "\n\n\n";
 
     timetable.toString();
-
+print("10");
 
 
 

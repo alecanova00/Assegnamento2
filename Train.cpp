@@ -56,8 +56,10 @@ vector<Station> Train::get_train_path() const
 	StationLink* tmp = actual_station;
 	vector<Station> return_vector;
 	while (tmp != nullptr)
-	{
+	{	
+		cout << "\nSPEEEEEEED \t\n";
 		return_vector.push_back(*(tmp->get_station()));
+		cout << "\n vector\t" << return_vector.back().get_station_name() << "\n";
 		tmp = tmp->get_next_link();
 	}
 	delete tmp;

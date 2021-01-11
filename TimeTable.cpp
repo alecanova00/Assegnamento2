@@ -20,7 +20,7 @@ TimeTable::TimeTable(std::string file) {
             line.erase(0,token.length()+1);
 
             token = line.substr(0,line.find(delimiter));
-            StationType st = static_cast<StationType>(stoi(token));
+            int st = static_cast<int>(stoi(token));
             line.erase(0,token.length()+1);
 
             token = line.substr(0,line.find(delimiter));
@@ -65,7 +65,7 @@ void TrainTimeTable::toString() const {
 }
 
 
-TrainTimeTable::TrainTimeTable(int t, StationType st, Train_type tt, std::vector<int> tm) {
+TrainTimeTable::TrainTimeTable(int t, int st, Train_type tt, std::vector<int> tm) {
     train = t;
     stationType = st;
     trainType = tt;
@@ -108,11 +108,11 @@ void TimeTable::chechOrari(list<Train>* lista) {
         for(int j =0; j<ttt.size(); j++){//scorro la lista di orari salvata
             
             if(ttt[j].getTrainNumber() == (*i).get_train_number()){ //se l'elemento nella lista e l'elemento negli orari combaciano
-
+                cout << "\nVector \t\n";
                 vector<Station> stations = (*i).get_train_path(); //stazioni che il treno deve fare
-
+                cout << "\n dopo vector \t\n";
                 double speed = (*i).get_cruise_speed()/3.6; //velocità del treno
-
+                cout << "\nSPEEEEEEED \t" << speed << "\n";
                 if(ttt[j].getTimes().size() < stations.size()){ //caso in cui ho un difetto di orari
                     vector<int> updatedTimes = ttt[j].getTimes();
                     for(int m=ttt[j].getTimes().size(); m < stations.size(); m++){
