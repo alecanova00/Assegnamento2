@@ -9,7 +9,7 @@
 public:
 	Regional_train();
 	Regional_train(int speed,StationLink stns,int nmb,bool forward);
-	Regional_train(int speed, StationLink* stns, int nmb, bool forward);
+	Regional_train(int speed,const StationLink* stns, int nmb, bool forward);
 	Regional_train(const Regional_train& train) noexcept;
 	Regional_train(const Regional_train&& train) noexcept;
 	Regional_train& operator= (Regional_train& train)noexcept;

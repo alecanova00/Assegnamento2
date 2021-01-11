@@ -71,13 +71,11 @@ protected:
 	/// </summary>
 	int delay;
 	/// <summary>
-	/// pointer to the previous station, nullptr if the train is moving
-	/// </summary>
-	StationLink* actual_station;
-	/// <summary>
 	/// pointer to the next station, nullptr if the race is ended
 	/// </summary>
-	StationLink* next_station;
+	vector<Station*> stations;
+	int actual_station;
+	int next_station;
 	int next_station_distance;
 	int prev_station_distance;
 	Train_status status;
@@ -100,8 +98,7 @@ protected:
 	/// </summary>
 	/// <param name="stns">stations list</param>
 	/// <returns>stations list from end to begin</returns>
-	StationLink* revert(const StationLink* stns);
-
+	vector<Station*> revert(vector<Station*> stns);
 	
 };
 class Error

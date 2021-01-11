@@ -20,7 +20,7 @@ public:
 	static const int MAX_SPEED = 300;
 	static const Train_type TYPE = Train_type::Super_high_speed;
 private:
-	StationLink* pick(const StationLink* stns);
+	vector<Station*> pick(vector<Station*> stns);
 };
 
 #endif // !HIGH_SPEED_TRAIN_SUPER_H

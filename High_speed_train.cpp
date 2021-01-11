@@ -16,16 +16,20 @@ High_speed_train::High_speed_train(int speed, const StationLink* stns, int nmb, 
 		throw Error("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
-	StationLink* tmp = pick(stns);
-	if (forward)
-		actual_station = tmp;
-	else
+	StationLink* tmp = new StationLink(*stns);
+	while (tmp != nullptr)
 	{
-		actual_station = revert(tmp);
+		stations.push_back(tmp->get_station());
+		tmp = tmp->get_next_link();
 	}
+	stations = pick(stations);
+	if (!forward)
+		stations = revert(stations);
 	train_number = nmb;
-	next_station = actual_station->get_next_link();
+	actual_station = 0;
+	next_station = 1;
 	status = Train_status::Create;
+	delete tmp;
 }
 High_speed_train::High_speed_train(int speed,  StationLink stns, int nmb, bool forward)
 {
@@ -37,15 +41,18 @@ High_speed_train::High_speed_train(int speed,  StationLink stns, int nmb, bool f
 		throw Error("The stations' list is null!");
 	CRUISE_SPEED = speed;
 	actual_speed = 0;
-	StationLink* tmp = pick(&stns);
-	if (forward)
-		actual_station = tmp;
-	else
+	StationLink* tmp = new StationLink(stns);
+	while (tmp != nullptr)
 	{
-		actual_station = revert(tmp);
+		stations.push_back(tmp->get_station());
+		tmp = tmp->get_next_link();
 	}
+	stations = pick(stations);
+	if (!forward)
+		stations = revert(stations);
 	train_number = nmb;
-	next_station = actual_station->get_next_link();
+	actual_station = 0;
+	next_station = 1;
 	status = Train_status::Create;
 }
 High_speed_train::High_speed_train(const High_speed_train& train) noexcept 
@@ -56,7 +63,12 @@ High_speed_train::High_speed_train(const High_speed_train& train) noexcept
 	next_station = train.next_station;
 	status = train.status;
 	delay = train.delay;
-	forward_direction = train.forward_direction; //
+	forward_direction = train.forward_direction;
+	stations.clear();
+	for (int i = 0; i < train.stations.size(); i++)
+	{
+		stations.push_back(train.stations[i]);
+	}//
 }
 High_speed_train::High_speed_train(const High_speed_train&& train) noexcept
 {
@@ -66,7 +78,12 @@ High_speed_train::High_speed_train(const High_speed_train&& train) noexcept
 	next_station = train.next_station;
 	status = train.status;
 	delay = train.delay;
-	forward_direction = train.forward_direction; //
+	forward_direction = train.forward_direction;
+	stations.clear();
+	for (int i = 0; i < train.stations.size(); i++)
+	{
+		stations.push_back(train.stations[i]);
+	}//
 	delete &train;
 }
 High_speed_train& High_speed_train::operator= (High_speed_train& train)noexcept
@@ -82,10 +99,11 @@ High_speed_train& High_speed_train::operator= (High_speed_train&& train)noexcept
 }
 High_speed_train::~High_speed_train()
 {
-	actual_station = nullptr;
-	next_station = nullptr;
+	actual_station = 0;
+	next_station = 0;
 	status = Train_status::Remove;
 	actual_speed = 0;
+	stations.clear();
 }
 void High_speed_train::move() {
 	if (status == Train_status::End || status == Train_status::Remove)
@@ -114,7 +132,7 @@ void High_speed_train::move() {
 			else if (can_move())
 			{
 				int direction = (forward_direction) ? 1 : 0;
-				next_station->get_station()->set_on_rail(train_number, direction);
+				stations[next_station]->set_on_rail(train_number, direction);
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
@@ -130,14 +148,14 @@ void High_speed_train::move() {
 				actual_speed = 0;
 				next_station_distance = STATION_SAFE_DISTANCE;
 				status = Train_status::Park;
-				next_station->get_station()->set_on_parking(train_number);
+				stations[next_station]->set_on_parking(train_number);
 			}
-			if (!next_station->get_station()->is_train_turn(train_number))
+			if (!stations[next_station]->is_train_turn(train_number))
 				delay++;
 			else
 			{
 				int direction = (forward_direction) ? 1 : 0;
-				next_station->get_station()->set_on_rail(train_number, direction);
+				stations[next_station]->set_on_rail(train_number, direction);
 				int covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
@@ -150,19 +168,13 @@ void High_speed_train::move() {
 	}
 }
 
-StationLink* High_speed_train::pick(const StationLink* stns)
+vector<Station*> High_speed_train::pick(vector<Station*>stns)
 {
-	StationLink* tmp = new StationLink(*stns);
-	while (tmp->get_next_link() != nullptr)
+	vector<Station*> return_vector;
+	for (int i = 0; i < stns.size(); i++)
 	{
-		if (tmp->get_station()->get_station_type() == 1)
-		{
-			tmp->get_previous_link()->set_next_link(tmp->get_next_link());
-			tmp->get_next_link()->set_previous_link(tmp->get_previous_link());
-			tmp = tmp->get_next_link();
-		}
-		if (tmp->get_next_link()->get_station()->get_station_type() == 1)
-			tmp->set_next_link(nullptr);
+		if (stns[i]->get_station_type() == 0)
+			return_vector.push_back(stns[i]);
 	}
-	return tmp;
+	return return_vector;
 }
