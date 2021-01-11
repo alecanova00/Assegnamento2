@@ -6,21 +6,20 @@
 #define ASSEGNAMENTO_2_TIMETABLE_H
 
 #include <vector>
+#include <list>
+#include <string>
+#include "Train.h"
 
-static std::vector<int> timeConversion(int time){
-    std::vector<int> v(3);
+static std::string timeConversion(int time){
+    std::string h; std::string m;
     int hour = (int)time/60;
-
-    if(hour >23){
-        v[3]=1;
-        hour-=24;
-    }else v[3]=0;
-    v[0] = hour;
-
+    if(hour >23)hour-=24;
+    if(hour<12) h="0";
+    h+=std::to_string(hour);
     int minutes = (int)time%60;
-    v[1]=minutes;
-    return v;
-
+    if(minutes < 10) m="0";
+    m+=std::to_string(minutes);
+    return h+":"+m;
 }
 
 enum StationType{
@@ -45,6 +44,11 @@ public:
     void setDelay(int delay, int station); //imposta il ritardo
     void toString() const; //stampa la riga del tabellone relativa a un treno
     int getTrainNumber(){return train;}
+    std::vector<int> getTimes(){return times;}
+    std::vector<int>* getDelays(){return delays;}
+    void set_time (const int , const int);
+    int get_time(const int);
+    void setTimes(const std::vector<int>*);
     ~TrainTimeTable();
 };
 
@@ -53,9 +57,11 @@ private:
     std::vector<TrainTimeTable> ttt;
 public:
     TimeTable(std::string file);
-    void chechOrari();
+    void chechOrari(std::list<Train>*);
     void setDelay(int train, int delay, int station); //imposta il ritardo
     void toString() const; //stampa l'intero tabellone
+
+    int getArriveTime(const int train, const int station);
 
     ~TimeTable();
 };
