@@ -99,9 +99,8 @@ bool Station::get_standard_rail_backward_status(int index){
 
 
 bool Station::is_rail_free(int direction){
-
-    bool status;
-
+    
+    
     if(direction == 0){
 
         for(int i = 0; i < 2; i++){

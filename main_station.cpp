@@ -11,8 +11,8 @@
 using namespace std;
 
 
-string FILE_NAME = "line_description.txt";
-string FILE_DELIMITER = "#";
+string const FILE_NAME = "line_description.txt";
+string const FILE_DELIMITER = "#";
 
 
 
@@ -22,17 +22,23 @@ int file_size(){
     string line;
     ifstream myfile(FILE_NAME);
     
+    myfile.exceptions (ifstream::badbit);
+
     int count = 0;
 
-    if(myfile.is_open()){
+    try{
+        myfile.is_open();
         while (getline(myfile,line))
         {
             count++;
         }
-        
-        myfile.close();
-    
+
     }
+    catch(const ifstream::failure& e){
+        cout << "ERRORE APERTURA/LETTURA FILE STAZIONI\n";
+    }
+
+    myfile.close();
     
     count--;
     
@@ -45,20 +51,18 @@ int file_size(){
 StationLink* read_file(){
     string line;
     ifstream myfile(FILE_NAME);
+    myfile.exceptions (ifstream::badbit);
     int fsize = file_size();
 
-    StationLink* sl;
-    StationLink* first;
+    StationLink* sl = nullptr;
+    StationLink* first = nullptr;
     string station_name;
     int station_type;
     double station_distance;
     int counter = 0;
     
-
-    if(myfile.is_open()){
-        
-        
-
+    try{
+        myfile.is_open();
         while (getline(myfile,line)){
             
             
@@ -70,24 +74,31 @@ StationLink* read_file(){
             }
             else{
 
-                station_name = line.substr(0,line.find(FILE_DELIMITER));
-                line.erase(0,station_name.length()+1);
+                if(line != ""){
+                    station_name = line.substr(0,line.find(FILE_DELIMITER));
+                    line.erase(0,station_name.length()+1);
 
-                station_type = stoi(line.substr(0,line.find(FILE_DELIMITER)));   
-                line.erase(0,to_string(station_type).length()+1);
+                    station_type = stoi(line.substr(0,line.find(FILE_DELIMITER)));   
+                    line.erase(0,to_string(station_type).length()+1);
 
-                station_distance = stod(line.substr(0,line.find(FILE_DELIMITER)));
-                line.erase(0,to_string(station_distance).length()+1);
+                    station_distance = stod(line.substr(0,line.find(FILE_DELIMITER)));
+                    line.erase(0,to_string(station_distance).length()+1);
 
                 
 
-                if(station_type == 0){
-                    sl->set_next_link(new StationLink(new PrimaryStation(station_name,station_distance),sl,nullptr)) ;
-                    sl = sl->get_next_link();  
+                    if(station_type == 0){
+                        sl->set_next_link(new StationLink(new PrimaryStation(station_name,station_distance),sl,nullptr)) ;
+                        sl = sl->get_next_link();  
+                    }
+                    else{
+                        sl->set_next_link(new StationLink(new SecondaryStation(station_name,station_distance),sl,nullptr)) ;
+                        sl = sl->get_next_link(); 
+                    }
+                
                 }
+
                 else{
-                    sl->set_next_link(new StationLink(new SecondaryStation(station_name,station_distance),sl,nullptr)) ;
-                    sl = sl->get_next_link(); 
+                    cout << "ERRORE LETTURA DATI DAL FILE DELLE STAZIONI\n";
                 }
 
                 
@@ -96,10 +107,15 @@ StationLink* read_file(){
             
             
         }
-
-        myfile.close();
-
     }
+    catch(const ifstream::failure& e){
+        cout << "ERRORE APERTURA/LETTURA FILE STAZIONI\n";
+    
+    }   
+
+    myfile.close();
+
+    
     return first;
 
 }
@@ -144,64 +160,6 @@ int main (void){
     
 
 
-/*              Test con dei treni
-
-    vector<int> trains(15);
-
-    for(int i = 0; i < 15; i++){
-        trains[i] = i;
-    }
-
-    
-    
-    
-    if(first->get_station()->is_rail_free(0)) {
-        first->get_station()->set_on_rail(trains[0],0);
-    }   
-    if(first->get_station()->is_rail_free(0)) {
-        first->get_station()->set_on_rail(trains[1],0);
-    } 
-    if(first->get_station()->is_rail_free(0)) {
-        first->get_station()->set_on_rail(trains[2],0);
-    } 
-
-    print(first->get_station()->train_pause_time(trains[0]));
-    print(first->get_station()->train_pause_time(trains[1]));
-
-    print(first->get_station()->train_pause_time(trains[0]));
-    print(first->get_station()->train_pause_time(trains[1]));
-
-    print(first->get_station()->train_pause_time(trains[0]));
-    print(first->get_station()->train_pause_time(trains[1]));
-    if(first->get_station()->is_rail_free(0)) {
-        first->get_station()->set_on_rail(trains[2],0);
-    } 
-
-    print(first->get_station()->train_pause_time(trains[0]));
-    print(first->get_station()->train_pause_time(trains[1]));
-
-    print(first->get_station()->train_pause_time(trains[0]));
-    print(first->get_station()->train_pause_time(trains[1]));
-    if(first->get_station()->is_rail_free(0)) {
-        first->get_station()->set_on_rail(trains[2],0);
-    } 
-
-    print(first->get_station()->train_pause_time(trains[0]));
-    print(first->get_station()->train_pause_time(trains[1]));
-
-    if(first->get_station()->is_rail_free(0)) {
-        first->get_station()->set_on_rail(trains[2],0);
-    } 
-    print(first->get_station()->train_pause_time(trains[2]));
-
-
-
-    */
-    
-
-
-    
-    
 
     
 
