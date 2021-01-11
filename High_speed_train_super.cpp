@@ -71,12 +71,24 @@ High_speed_train_super::High_speed_train_super(const High_speed_train_super&& tr
 }
 High_speed_train_super& High_speed_train_super::operator= (High_speed_train_super& train)noexcept
 {
-	High_speed_train_super return_value{ train };
-	return *this;
+	CRUISE_SPEED = train.CRUISE_SPEED;
+	actual_speed = train.actual_speed;
+	actual_station = train.actual_station;
+	next_station = train.next_station;
+	status = train.status;
+	delay = train.delay;
+	forward_direction = train.forward_direction;
+	return *this;//
 }
 High_speed_train_super& High_speed_train_super::operator= (High_speed_train_super&& train)noexcept
 {
-	High_speed_train_super return_value{ train };
+	CRUISE_SPEED = train.CRUISE_SPEED;
+	actual_speed = train.actual_speed;
+	actual_station = train.actual_station;
+	next_station = train.next_station;
+	status = train.status;
+	delay = train.delay;
+	forward_direction = train.forward_direction; //
 	delete& train;
 	return *this;
 }

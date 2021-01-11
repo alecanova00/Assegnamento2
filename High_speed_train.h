@@ -7,6 +7,7 @@
 #include "Train.h"
  class High_speed_train:public Train
 {
+public:
 	 High_speed_train();
 	High_speed_train(int speed, StationLink stns, int nmb, bool forward);
 	High_speed_train(int speed,const StationLink* stns, int nmb, bool forward);

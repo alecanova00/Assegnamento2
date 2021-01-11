@@ -96,3 +96,4 @@ void Train::start_from_station()
 		actual_speed = 0;
 	}
 }
+

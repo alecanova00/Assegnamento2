@@ -10,7 +10,6 @@
 class Train
 {
 public:
-	virtual void move()=0;
 	inline int get_cruise_speed() const { return CRUISE_SPEED; }
 	inline int get_actual_speed() const { return actual_speed; }
 	inline int get_train_number() const { return train_number; }
@@ -100,6 +99,12 @@ protected:
 	/// <param name="stns">stations list</param>
 	/// <returns>stations list from end to begin</returns>
 	StationLink* revert(const StationLink* stns);
+};
+
+class Error :public exception
+{
+	Error(string msg);
+	string get_message();
 };
 #endif // !TRAIN_H
 

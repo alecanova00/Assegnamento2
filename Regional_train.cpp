@@ -65,14 +65,22 @@ Regional_train::Regional_train(const Regional_train&& train) noexcept
 }
 Regional_train& Regional_train::operator= (Regional_train& train)noexcept
 {
-	Regional_train return_value{ train };
-	return return_value;
+	CRUISE_SPEED = train.CRUISE_SPEED;
+	actual_speed = train.actual_speed;
+	actual_station = train.actual_station;
+	next_station = train.next_station;
+	status = train.status;
+	return *this;
 }
 Regional_train& Regional_train::operator= (Regional_train&& train)noexcept
 {
-	Regional_train return_value{ train };
-	delete &train;
-	return return_value;
+	CRUISE_SPEED = train.CRUISE_SPEED;
+	actual_speed = train.actual_speed;
+	actual_station = train.actual_station;
+	next_station = train.next_station;
+	status = train.status;
+	delete& train;
+	return *this;
 }
 Regional_train::~Regional_train()
 {
