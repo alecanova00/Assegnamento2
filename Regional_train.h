@@ -7,6 +7,7 @@
  class Regional_train:public Train
 {
 public:
+	Regional_train();
 	Regional_train(int speed,StationLink stns,int nmb,bool forward);
 	Regional_train(int speed,const StationLink* stns, int nmb, bool forward);
 	Regional_train(const Regional_train& train) noexcept;

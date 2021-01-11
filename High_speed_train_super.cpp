@@ -2,8 +2,14 @@
 // Created by Alessandro Visentin on 04/01/21.
 //
 #include "High_speed_train_super.h"
+High_speed_train_super::High_speed_train_super()
+{
+	status = Train_status::Default_initialized;
+}
 High_speed_train_super::High_speed_train_super(int speed, const StationLink* stns, int nmb, bool forward)
 {
+	if (speed <= 0)
+		throw new exception("Train's max speed in negative or null!");
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
 	if (stns == nullptr)
@@ -23,6 +29,8 @@ High_speed_train_super::High_speed_train_super(int speed, const StationLink* stn
 }
 High_speed_train_super::High_speed_train_super(int speed, StationLink stns, int nmb, bool forward)
 {
+	if (speed <= 0)
+		throw new exception("Train's max speed in negative or null!");
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
 	if (stns.get_station() == nullptr)

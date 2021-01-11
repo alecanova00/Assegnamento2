@@ -2,8 +2,14 @@
 // Created by Alessandro Visentin on 04/01/21.
 //
 #include "Regional_train.h"
+Regional_train::Regional_train()
+{
+	status = Train_status::Default_initialized;
+}
 Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool forward)
 {
+	if (speed <= 0)
+		throw new exception("Train's max speed in negative or null!");
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
 	if (stns == nullptr)
@@ -22,6 +28,8 @@ Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool
 }
 Regional_train::Regional_train(int speed, StationLink stns, int nmb, bool forward)
 {
+	if (speed <= 0)
+		throw new exception("Train's max speed in negative or null!");
 	if (speed > MAX_SPEED)
 		throw new exception("Train's max speed in lower!");
 	if (stns.get_station() == nullptr)
@@ -76,9 +84,9 @@ Regional_train::~Regional_train()
 void Regional_train::move() {
 	if (status == Train_status::End || status == Train_status::Remove)
 		return;
-	if (get_remaining_time()<=0)
+	if (get_remaining_time()<=0 || status==Train_status::Create)
 	{
-		if (status == Train_status::Station)
+		if (status == Train_status::Station || status==Train_status::Create)
 			start_from_station();
 		if (prev_station_distance < STATION_SAFE_DISTANCE)
 		{
