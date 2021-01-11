@@ -1,7 +1,9 @@
 //
 // Created by Alessandro Visentin on 04/01/21.
 //
-#pragma once
+#ifndef HIGH_SPEED_TRAIN_H
+#define HIGH_SPEED_TRAIN_H
+
 #include "Train.h"
  class High_speed_train:public Train
 {
@@ -18,3 +20,4 @@
 private:
 	StationLink* pick(const StationLink* stns);
 };
+#endif // !HIGH_SPEED_TRAIN_H

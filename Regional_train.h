@@ -1,7 +1,8 @@
 //
 // Created by Alessandro Visentin on 04/01/21.
 //
-#ifndef Regional_train
+#ifndef REGIONAL_TRAIN_H
+#define REGIONAL_TRAIN_H
 #include "Train.h"
  class Regional_train:public Train
 {
@@ -18,4 +19,4 @@ public:
 	void move();
 };
 
-#endif // !Regional_train
+#endif // !REGIONAL_TRAIN_H
