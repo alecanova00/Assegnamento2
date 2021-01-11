@@ -20,11 +20,11 @@ TimeTable::TimeTable(std::string file) {
             line.erase(0,token.length()+1);
 
             token = line.substr(0,line.find(delimiter));
-            int st = stoi(token);
+            StationType st = static_cast<StationType>(stoi(token));
             line.erase(0,token.length()+1);
 
             token = line.substr(0,line.find(delimiter));
-            int traintype = stoi(token);
+            TrainType traintype = static_cast<TrainType>(stoi(token));
             line.erase(0,token.length()+1);
 
             vector<int> times;
@@ -51,11 +51,16 @@ TimeTable::TimeTable(std::string file) {
 void TrainTimeTable::toString() const {
     cout<<"treno: "<<train<<", tipo stazione: "<<stationType<<", tipo treno: "<<trainType<<", orari: ";
     for(int i=0; i<times.size(); i++){
+        /*
         vector<int> conversion = timeConversion(times[i]);
         cout<<conversion[0]<<":"<<conversion[1]<<"\t";
         cout<<" -> ";
         vector<int>conversionDelay = timeConversion((*delays)[i]);
         cout<<conversionDelay[0]<<":"<<conversionDelay[1]<<"   |   ";
+*/
+        string time = timeConversion(times[i]);
+        cout<<time<<" -> "<<timeConversion((*delays)[i])<<"   |   ";
+        //cout<<times[i]<<" -> "<<(*delays)[i]<<"   |   ";
     }
 }
 
@@ -90,10 +95,90 @@ void TimeTable::setDelay(int train, int delay, int station) {
     }
 }
 
+void TimeTable::chechOrari(list<Train>* lista) {
+    //foreach treni nella lista di tutti i treni
+
+    //5 minuti di stop alle stazioni
+
+    //decelerazione tot metri prima
+    //conversione km -> metri
+
+    list<Train>::iterator i;
+    for(i = (*lista).begin(); i != (*lista).end(); i++){ //scorro la lista di treni ricevuta
+        for(int j =0; j<ttt.size(); j++){//scorro la lista di orari salvata
+            
+            if(ttt[j].getTrainNumber() == (*i).get_train_number()){ //se l'elemento nella lista e l'elemento negli orari combaciano
+
+                vector<Station> stations = (*i).get_train_path(); //stazioni che il treno deve fare
+
+                double speed = (*i).get_cruise_speed()/3.6; //velocità del treno
+
+                if(ttt[j].getTimes().size() < stations.size()){ //caso in cui ho un difetto di orari
+                    vector<int> updatedTimes = ttt[j].getTimes();
+                    for(int m=ttt[j].getTimes().size(); m < stations.size(); m++){
+                        int distanceBetweenStations = stations[m].get_station_distance()-stations[m-1].get_station_distance();
+                        int time = (int)(distanceBetweenStations/speed)+10; //10 sta per il margine
+                        updatedTimes.push_back(ttt[j].get_time(m-1)+time);
+                    }
+                    ttt[j].setTimes(&updatedTimes);
+                }else if (ttt[j].getTimes().size() > stations.size()){ //caso in cui ho un eccesso di orari
+                    vector<int> cuttedTimes (stations.size());
+                    for(int m =0; m< stations.size(); m++){
+                        cuttedTimes[m] = ttt[j].get_time(m);
+                    }
+                    ttt[j].setTimes(&cuttedTimes);
+                }
+
+                for (int ij = 0; ij < stations.size() - 1; ij++) { //aggiustamento degli orari
+                    int distanceBetweenStations =
+                            ((stations[ij + 1].get_station_distance()*1000) - (stations[ij].get_station_distance()*1000))-10000; //-10 perchè deve decellerare
+
+                    int time_deceleration = ( 10000/(80/3.6) ) / 60; //tempo che impiega a percorrere gli ultimi 10km prima della stazione
+                    int time = (int) time_deceleration + (distanceBetweenStations / speed + 1) + 5 ; //tempo totale
+
+
+
+                    int predicted_time = ttt[j].getTimes()[ij + 1] - ttt[j].getTimes()[ij]; //tempo scritto negli orari
+                    if (time != predicted_time) { //se il tempo scritto e quello calcolato sono diversi
+                        ttt[j].set_time(ttt[j].get_time(ij) + time, ij + 1); //cambio l'orario in memoria con quello aggiornato
+                    }
+                }
+            }
+        }
+    }
+}
+
+void TrainTimeTable::setTimes(const std::vector<int> * updatedTimes) {
+    if((*updatedTimes).size() > times.size()){
+        for(int i=times.size(); i<(*updatedTimes).size(); i++){
+            times.push_back((*updatedTimes)[i]);
+            delays->push_back(0);
+        }
+    }
+    if((*updatedTimes).size() < times.size()){
+        times.resize((*updatedTimes).size());
+    }
+    for(int i=0; i< (*updatedTimes).size(); i++){
+        times[i] = (*updatedTimes)[i];
+    }
+}
+
+void TrainTimeTable::set_time(const int updated_time, const int station) {
+    times[station] = updated_time;
+}
+
+int TrainTimeTable::get_time(const int station) {
+    return times[station];
+}
+
 TrainTimeTable::~TrainTimeTable() {
 
 }
 
 TimeTable::~TimeTable() {
 
+}
+
+int TimeTable::getArriveTime(const int train, const int station) {
+    return ttt[train].get_time(station);
 }
