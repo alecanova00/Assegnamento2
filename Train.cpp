@@ -40,13 +40,6 @@ Train::~Train()
 vector<Station*> Train::get_train_path() const
 {
     return stations;
-    /*
-	vector<Station>return_vector;
-	for (int i = 0; i < stations.size(); i++)
-	{
-		return_vector.push_back(*(stations.at(i)));
-	}
-	return return_vector;*/
 }
 
 void Train::arrive()
@@ -67,7 +60,7 @@ void Train::arrive()
 vector<Station*> Train::revert(vector<Station*> stns)
 {
 	vector<Station*> return_vector(stns.size());
-	for (int i = stns.size()-1; i >=0 ; i++)
+	for(int i = stns.size()-1; i >=0 ; i--)
 	{
 		return_vector.push_back(stns[i]);
 	}
