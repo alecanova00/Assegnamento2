@@ -21,7 +21,7 @@ Regional_train::Regional_train(int speed, const StationLink* stns, int nmb, bool
 	}
 	if (!forward)
 		stations = revert(stations);
-	train_number = nmb;	
+	train_number = nmb;
 	forward_direction = forward;
 	delete tmp;
 	status = Train_status::Create;
@@ -127,7 +127,7 @@ void Regional_train::move() {
 		if (prev_station_distance < STATION_SAFE_DISTANCE) //the train is near the starting station 
 		{
 			actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
-			 covered_distance = actual_speed / TIME_CONVERTER;
+			covered_distance = actual_speed / TIME_CONVERTER;
 			prev_station_distance += covered_distance;
 			next_station_distance -= covered_distance;
 		}
@@ -136,13 +136,13 @@ void Regional_train::move() {
 			if (can_move()) //the station has a free binary
 			{
 				actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
-				 covered_distance = actual_speed / TIME_CONVERTER;
+				covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				status = Train_status::Arriving;
 				stations[next_station]->set_on_rail(train_number, forward_direction);
 			}
-			else { 
+			else {
 				actual_speed = 0;
 				next_station_distance = 5;
 				stations[next_station]->set_on_parking(train_number);		//the station is occupy
@@ -151,7 +151,7 @@ void Regional_train::move() {
 		}
 		else //the train goes with his cruise speed
 		{
-		 covered_distance = actual_speed / TIME_CONVERTER;
+			covered_distance = CRUISE_SPEED / TIME_CONVERTER;
 			prev_station_distance += covered_distance;
 			next_station_distance -= covered_distance;
 		}
@@ -177,7 +177,7 @@ void Regional_train::move() {
 		break;
 	case Train_status::Arriving:         //the train goes to the station
 		actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
-		 covered_distance = actual_speed / TIME_CONVERTER;
+		covered_distance = actual_speed / TIME_CONVERTER;
 		prev_station_distance += covered_distance;
 		next_station_distance -= covered_distance;
 		if (next_station_distance <= 0)

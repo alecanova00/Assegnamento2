@@ -47,7 +47,7 @@ void Train::arrive()
 {
 	actual_station++;
 	next_station++;
-	if (next_station > stations.size())
+	if (next_station >= stations.size())
 	{
 		actual_station = 0;
 		status = Train_status::End;

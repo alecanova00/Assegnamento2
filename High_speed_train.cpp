@@ -133,7 +133,7 @@ void High_speed_train::move() {
 		}
 		else //the train goes with his cruise speed
 		{
-			covered_distance = actual_speed / TIME_CONVERTER;
+			covered_distance = CRUISE_SPEED / TIME_CONVERTER;
 			prev_station_distance += covered_distance;
 			next_station_distance -= covered_distance;
 		}
