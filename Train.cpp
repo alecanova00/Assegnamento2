@@ -59,19 +59,25 @@ void Train::arrive()
 }
 vector<Station*> Train::revert(vector<Station*> stns)
 {
-	vector<Station*> return_vector(stns.size());
+	vector<Station*> return_vector;
 	for(int i = stns.size()-1; i >=0 ; i--)
 	{
 		return_vector.push_back(stns[i]);
 	}
-	return return_vector;
+	return return_vector;	
 }
 
 void Train::start_from_station()
 {
-	if (status==Train_status::Station)
+	if (status==Train_status::Station && forward_direction)
 	{
 		next_station_distance = stations[next_station]->get_station_distance() - stations[actual_station]->get_station_distance();
+		prev_station_distance = 0;
+		status = Train_status::Move;
+	}
+	if (status == Train_status::Station && !forward_direction)
+	{
+		next_station_distance = stations[actual_station]->get_station_distance() - stations[next_station]->get_station_distance();
 		prev_station_distance = 0;
 		status = Train_status::Move;
 	}
@@ -86,3 +92,12 @@ string Error::get_message()
 	return message;
 }
 
+void Train::start()
+{
+	if (status == Train_status::Create)
+	{
+		status = Train_status::Station;
+		actual_station = 0;
+		next_station = 1;
+	}
+}
