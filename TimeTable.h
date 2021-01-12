@@ -69,6 +69,7 @@ public:
     Train_type getTrainType(int train) { return ttt[train].getTrainType(); };
     int getStationType(int train) { return ttt[train].getStationType(); };
     int getTimeTableSize(){return ttt.size();}
+    int getStartTime(const int train){return ttt[train].getTime(0);}
 
     int getArriveTime(const int train, const int station);
 

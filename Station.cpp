@@ -14,6 +14,11 @@ Rail::Rail(){
 
 }
 
+Rail::~Rail(){
+    train = -1;
+    time = 0;
+}
+
 void Rail::set_train(int t){
     train = t;
 }

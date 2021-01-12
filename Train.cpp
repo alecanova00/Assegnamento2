@@ -92,6 +92,10 @@ string Error::get_message()
 	return message;
 }
 
+void Train::move(){
+	cout << "treno mosso TRAIN\n" ;
+}
+
 void Train::start()
 {
 	if (status == Train_status::Create)

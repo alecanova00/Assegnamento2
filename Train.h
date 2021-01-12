@@ -39,6 +39,7 @@ public:
 	/// </summary>
 	/// <returns>the list of the stations</returns>
 	vector<Station*> get_train_path()const;
+	void move();
 	void start();
 protected:
 	
