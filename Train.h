@@ -16,8 +16,8 @@ public:
 	inline int get_train_number() const { return train_number; }
 	inline int get_delay()const { return delay; }
 	inline Train_status get_status()const { return status; }
-	Station get_actual_station()const;
-	Station get_next_station()const;
+	Station* get_actual_station()const;
+	Station* get_next_station()const;
 	/// <summary>
 	/// 
 	/// </summary>
@@ -38,8 +38,11 @@ public:
 	/// </summary>
 	/// <returns>the list of the stations</returns>
 	vector<Station*> get_train_path()const;
+	/// <summary>
+	/// dummy method for virtualization
+	/// </summary>
 	virtual void move();
-    int get_actual_station_index(){return actual_station;}
+    inline int get_actual_station_index(){return actual_station;}
     Train();
     ~Train() ;
 	void start();

@@ -78,7 +78,7 @@ void Train::start_from_station()
 	}
 	if (status == Train_status::Station && !forward_direction)
 	{
-		next_station_distance = stations[actual_station]->get_station_distance() - stations[next_station]->get_station_distance();
+		next_station_distance = stations[actual_station]->get_station_distance() - stations[next_station]->get_station_distance();   //if the train goes backward the distance to the next station is negative
 		prev_station_distance = 0;
 		status = Train_status::Move;
 	}

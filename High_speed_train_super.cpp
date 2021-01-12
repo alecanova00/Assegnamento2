@@ -2,10 +2,6 @@
 // Created by Alessandro Visentin on 04/01/21.
 //
 #include "High_speed_train_super.h"
-High_speed_train_super::High_speed_train_super()
-{
-	status = Train_status::Default_initialized;
-}
 High_speed_train_super::High_speed_train_super(int speed, const StationLink* stns, int nmb, bool forward)
 {
 	if (speed <= 0)
@@ -128,46 +124,50 @@ void High_speed_train_super::move() {
 	switch (status)
 	{
 	case Train_status::Move:
-		if (prev_station_distance < STATION_SAFE_DISTANCE)
+		if (prev_station_distance < STATION_SAFE_DISTANCE) //the train is near the starting station 
 		{
 			actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
-			 covered_distance = actual_speed / TIME_CONVERTER;
+			covered_distance = actual_speed / TIME_CONVERTER;
 			prev_station_distance += covered_distance;
 			next_station_distance -= covered_distance;
 		}
-		else if (next_station_distance - actual_speed / TIME_CONVERTER < STATION_SAFE_DISTANCE)
+		else if (next_station_distance - actual_speed / TIME_CONVERTER < STATION_SAFE_DISTANCE) //the train is near the arriving station
 		{
-			if (can_move())
+			if (can_move()) //the station has a free binary
 			{
-				 covered_distance = actual_speed / TIME_CONVERTER;
+				actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
+				covered_distance = actual_speed / TIME_CONVERTER;
 				prev_station_distance += covered_distance;
 				next_station_distance -= covered_distance;
 				status = Train_status::Arriving;
+				stations[next_station]->set_on_rail(train_number, forward_direction);
 			}
 			else {
 				actual_speed = 0;
 				next_station_distance = 5;
-				stations[next_station]->set_on_parking(train_number);
+				stations[next_station]->set_on_parking(train_number);		//the station is occupy
 				status = Train_status::Park;
 			}
 		}
-		else
+		else //the train goes with his cruise speed
 		{
-			 covered_distance = actual_speed / TIME_CONVERTER;
+			covered_distance = actual_speed / TIME_CONVERTER;
 			prev_station_distance += covered_distance;
 			next_station_distance -= covered_distance;
 		}
 		break;
 	case Train_status::Park:
-		if (stations[next_station]->is_train_turn(train_number))
+		if (stations[next_station]->is_train_turn(train_number)) //the train can leave the parking area
 		{
-			Train_status::Arriving;
 			actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
-			 covered_distance = actual_speed / TIME_CONVERTER;
+			covered_distance = actual_speed / TIME_CONVERTER;
 			prev_station_distance += covered_distance;
 			next_station_distance -= covered_distance;
+			status = Train_status::Arriving;
+			stations[next_station]->set_on_rail(train_number, forward_direction);
+
 		}
-		else {
+		else { //the train stay another minute in the parking area
 			delay++;
 		}
 		break;
@@ -175,9 +175,9 @@ void High_speed_train_super::move() {
 		if (get_remaining_time() <= 0)
 			start_from_station();
 		break;
-	case Train_status::Arriving:
+	case Train_status::Arriving:         //the train goes to the station
 		actual_speed = (CRUISE_SPEED < STATION_SPEED) ? CRUISE_SPEED : STATION_SPEED;
-		 covered_distance = actual_speed / TIME_CONVERTER;
+		covered_distance = actual_speed / TIME_CONVERTER;
 		prev_station_distance += covered_distance;
 		next_station_distance -= covered_distance;
 		if (next_station_distance <= 0)
