@@ -9,8 +9,8 @@
 #include "vector"
 class Train
 {
-public: 
-
+public:
+    inline int get_next_station_distance() const { return next_station_distance; }
 	inline int get_cruise_speed() const { return CRUISE_SPEED; }
 	inline int get_actual_speed() const { return actual_speed; }
 	inline int get_train_number() const { return train_number; }
@@ -87,6 +87,7 @@ protected:
 	double prev_station_distance;
 	Train_status status;
 	int train_number;
+	int internal_remaining_time;
 	/// <summary>
 	/// it's true if the train goes to begin to end, else false
 	/// </summary>

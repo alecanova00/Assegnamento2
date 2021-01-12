@@ -1,13 +1,13 @@
-Santa Maria
-stazione1#1#120
-stazione2#0#150
-stazione3#0#180
-stazione4#0#210
-stazione5#0#240
-stazione6#1#300
-stazione7#0#350
-stazione8#0#380
-stazione9#0#430
-stazione10#0#470
-stazione11#1#500
-stazione12#0#550
+Napoli Centrale
+Roma Termini#1#120
+Roma Tiburtina#0#150
+Firenza#0#180
+Bologna Centrale#0#210
+Ferrara#0#240
+Rovigo#1#300
+Padova#0#350
+Vigonza#0#380
+Dolo#0#430
+Mira Marano#0#470
+Mestre#1#500
+Venezia Santa Lucia#0#550

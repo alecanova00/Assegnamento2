@@ -202,3 +202,11 @@ int TimeTable::getTrainArriveTime(const int trainNumber, const int station) {
         }
     }
 }
+
+int TimeTable::getDelay(const int trainNumber, const int station) {
+    for(int i=0; i<ttt.size(); i++){
+        if(ttt[i].getTrainNumber() == trainNumber){
+            return (*ttt[i].getDelays())[station];
+        }
+    }
+}

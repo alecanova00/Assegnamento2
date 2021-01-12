@@ -15,7 +15,7 @@ static std::string timeConversion(int time){
     std::string h; std::string m;
     int hour = (int)time/60;
     if(hour >23)hour-=24;
-    if(hour<12) h="0";
+    if(hour<10) h="0";
     h+=std::to_string(hour);
     int minutes = (int)time%60;
     if(minutes < 10) m="0";
@@ -71,6 +71,7 @@ public:
     int getTimeTableSize(){return ttt.size();}
     int getStartTime(const int train){return ttt[train].getTime(0);}
 
+    int getDelay(const int trainNumber, const int station);
     int getArriveTime(const int train, const int station);
     int getTrainArriveTime(const int trainNumber, const int station);
 

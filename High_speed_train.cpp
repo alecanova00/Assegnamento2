@@ -154,7 +154,8 @@ void High_speed_train::move() {
 		}
 		break;
 	case Train_status::Station:
-		if (get_remaining_time() <= 0)
+        internal_remaining_time =stations[actual_station]->train_pause_time(train_number);
+        if (internal_remaining_time <= 0)
 			start_from_station();
 		break;
 	case Train_status::Arriving:         //the train goes to the station

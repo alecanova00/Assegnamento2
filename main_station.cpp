@@ -215,8 +215,9 @@ int main (void){
 
     int tempo = 0;
 
+
     while(tempo <= 1440){
-        if(tempo == 783){
+        if(tempo == 773){
             cout<<"";
         }
         list<Train*>::iterator iter;
@@ -230,40 +231,74 @@ int main (void){
                     tmp->start();
 
                     moving_trains.push_back(tmp);
-                    
-                    print("treno aggiunto: ");
-                    cout << (*iter)->get_train_number() << "\n";
+
+                    cout<<timeConversion(tempo)<<": ";
+                    cout<<"Il treno "<<tmp->get_train_number()<<" è in partenza dalla prima stazione"<<endl;
+                    //cout << tmp->get_train_number() << "\n";
                 }
                 
             }
         }
 
+
         for(int i = 0; i < moving_trains.size(); i++){
+            //moving_trains[i]->move();
+
+            if(moving_trains[i]->has_ended()){
+                cout<<timeConversion(tempo)<<": ";
+                cout<<"Il treno "<<moving_trains[i]->get_train_number()<<" ha finito la sua corsa con un ritardo "
+                                     "di "<<timetable.getDelay(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index())<<" minuti"<<endl;
+
+                moving_trains[i]= moving_trains[moving_trains.size()-1];
+                moving_trains.pop_back();
+
+            }
             moving_trains[i]->move();
-            if(moving_trains[i]->is_arrived()){
+
+
+
+
+            if(moving_trains[i]->is_arrived() && moving_trains[i]->get_remaining_time()==6){
+                cout<<timeConversion(tempo)<<": ";
+
+
                 cout<<"Il treno "<<moving_trains[i]->get_train_number()<<" è arrivato alla stazione "
-                    <<moving_trains[i]->get_actual_station().get_station_name()<<endl;
+                    <<moving_trains[i]->get_actual_station()->get_station_name()<<" alle ore "<<timeConversion(tempo);
 
                 timetable.setDelay(moving_trains[i]->get_train_number(), moving_trains[i]->get_delay(), moving_trains[i]->get_actual_station_index());
 
                 if(tempo > timetable.getTrainArriveTime(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index())){
+
                     int predictedTime = timetable.getTrainArriveTime(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index());
 
-                    timetable.setDelay(moving_trains[i]->get_train_number(), tempo-predictedTime, moving_trains[i]->get_actual_station_index());
+                    cout<<" con un ritardo di: "<<tempo-predictedTime<<" minuti"<<endl;
+
+                    int prevDelay = timetable.getDelay(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index()-1);
+
+                    timetable.setDelay(moving_trains[i]->get_train_number(), tempo-predictedTime-prevDelay, moving_trains[i]->get_actual_station_index());
+
                 }
 
                 timetable.toString();
+                cout<<endl;
             }
 
 
+            if(moving_trains[i]->get_next_station_distance() == 5){
+                cout<<timeConversion(tempo)<<": ";
+                cout<<"Il treno "<<moving_trains[i]->get_train_number()<<" sta arrivando alla stazione "
+                    <<moving_trains[i]->get_next_station()->get_station_name()<<" con un ritardo di "
+                    <<timetable.getDelay(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index())<<" minuti"<<endl;
+            }
+
+            if(moving_trains[i]->get_status() == Train_status::Station && moving_trains[i]->get_remaining_time()==0){
+                cout<<timeConversion(tempo)<<": ";
+                cout<<"Il treno "<<moving_trains[i]->get_train_number()<<" sta partendo dalla stazione "
+                    <<moving_trains[i]->get_actual_station()->get_station_name()<<endl;
+            }
 
 
-            //if(moving_trains[i].is_arrived()) {
-            //    cout << moving_trains[i].get_actual_station().get_station_name() << "\n";
-            //}
         }
-
-        cout << timeConversion(tempo) << "\n";
 
         tempo++;
     }

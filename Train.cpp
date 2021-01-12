@@ -27,7 +27,7 @@ Station* Train::get_next_station()const
 int Train::get_remaining_time()const
 {
 	if (status == Train_status::Station)
-		return stations[actual_station]->train_pause_time(train_number);
+		return internal_remaining_time;//stations[actual_station]->train_pause_time(train_number);
 	else return -1;
 }
 Train::Train():CRUISE_SPEED{0},actual_speed{0},actual_station{0},next_station{0},delay{0},
@@ -49,12 +49,13 @@ void Train::arrive()
 	next_station++;
 	if (next_station >= stations.size())
 	{
-		actual_station = 0;
+		//actual_station = 0;
 		status = Train_status::End;
 		actual_speed = 0;
 	}
 	else
 	{
+	    internal_remaining_time = 6;
 		status = Train_status::Station;
 	}
 }
