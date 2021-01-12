@@ -80,8 +80,8 @@ protected:
 	vector<Station*> stations;
 	int actual_station;
 	int next_station;
-	int next_station_distance;
-	int prev_station_distance;
+	double next_station_distance;
+	double prev_station_distance;
 	Train_status status;
 	int train_number;
 	/// <summary>
