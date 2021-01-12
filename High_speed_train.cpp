@@ -49,6 +49,7 @@ High_speed_train::High_speed_train(int speed,  StationLink stns, int nmb, bool f
 	stations = pick(stations);
 	if (!forward)
 		stations = revert(stations);
+	forward_direction = forward;
 	train_number = nmb;
 	status = Train_status::Create;
 }
@@ -61,6 +62,7 @@ High_speed_train::High_speed_train(const High_speed_train& train) noexcept
 	status = train.status;
 	delay = train.delay;
 	forward_direction = train.forward_direction;
+	train_number = train.train_number;
 	stations.clear();
 	for (int i = 0; i < train.stations.size(); i++)
 	{
@@ -76,6 +78,7 @@ High_speed_train::High_speed_train(const High_speed_train&& train) noexcept
 	status = train.status;
 	delay = train.delay;
 	forward_direction = train.forward_direction;
+	train_number = train.train_number;
 	stations.clear();
 	for (int i = 0; i < train.stations.size(); i++)
 	{

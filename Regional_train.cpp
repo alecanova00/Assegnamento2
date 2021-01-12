@@ -47,6 +47,7 @@ Regional_train::Regional_train(int speed, StationLink stns, int nmb, bool forwar
 	if (!forward)
 		stations = revert(stations);
 	train_number = nmb;
+	forward_direction = forward;
 	status = Train_status::Create;
 }
 Regional_train::Regional_train(const Regional_train& train) noexcept
@@ -57,6 +58,7 @@ Regional_train::Regional_train(const Regional_train& train) noexcept
 	next_station = train.next_station;
 	status = train.status;
 	forward_direction = train.forward_direction;
+	train_number = train.train_number;
 	stations.clear();
 	for (int i = 0; i < train.stations.size(); i++)
 	{
@@ -71,6 +73,7 @@ Regional_train::Regional_train(const Regional_train&& train) noexcept
 	next_station = train.next_station;
 	status = train.status;
 	forward_direction = train.forward_direction;
+	train_number = train.train_number;
 	stations.clear();
 	for (int i = 0; i < train.stations.size(); i++)
 	{
@@ -86,6 +89,7 @@ Regional_train& Regional_train::operator= (Regional_train& train)noexcept
 	next_station = train.next_station;
 	forward_direction = train.forward_direction;
 	status = train.status;
+	train_number = train.train_number;
 	stations.clear();
 	for (int i = 0; i < train.stations.size(); i++)
 	{
@@ -101,6 +105,7 @@ Regional_train& Regional_train::operator= (Regional_train&& train)noexcept
 	next_station = train.next_station;
 	forward_direction = train.forward_direction;
 	status = train.status;
+	train_number = train.train_number;
 	stations.clear();
 	for (int i = 0; i < train.stations.size(); i++)
 	{

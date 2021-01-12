@@ -11,18 +11,19 @@ bool Train::can_move()const
 		return true;
 	return false;
 }
-Station Train::get_actual_station() const 
+Station* Train::get_actual_station() const 
 {
-	if (status != Train_status::End)
-		return *(stations[actual_station]);
-	throw Error{ "The train's path is ended" };
+	if (status != Train_status::End && status!=Train_status::Remove)
+		return stations[actual_station];
+	return nullptr;
 }
-Station Train::get_next_station()const
+Station* Train::get_next_station()const
 {
-	if (status != Train_status::End)
-		return *(stations[actual_station]);
-	throw Error{ "The train's path is ended" };
+	if (status != Train_status::End && status != Train_status::Remove)
+		return stations[next_station];
+	return nullptr;
 }
+
 int Train::get_remaining_time()const
 {
 	if (status == Train_status::Station)
@@ -30,7 +31,7 @@ int Train::get_remaining_time()const
 	else return -1;
 }
 Train::Train():CRUISE_SPEED{0},actual_speed{0},actual_station{0},next_station{0},delay{0},
-forward_direction{true},next_station_distance{0},prev_station_distance{0},status{Train_status::Create},train_number{0}
+forward_direction{true},next_station_distance{0},prev_station_distance{0},status{Train_status::Default_initialized},train_number{0}
 {
 }
 Train::~Train()
