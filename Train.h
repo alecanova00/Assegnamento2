@@ -38,7 +38,7 @@ public:
 	/// get stations ordered by train's path
 	/// </summary>
 	/// <returns>the list of the stations</returns>
-	vector<Station> get_train_path()const;
+	vector<Station*> get_train_path()const;
 protected:
 	
 	

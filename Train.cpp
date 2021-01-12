@@ -37,14 +37,16 @@ Train::~Train()
 {
 }
 
-vector<Station> Train::get_train_path() const 
+vector<Station*> Train::get_train_path() const
 {
+    return stations;
+    /*
 	vector<Station>return_vector;
 	for (int i = 0; i < stations.size(); i++)
 	{
-		return_vector.push_back(*stations[i]);
+		return_vector.push_back(*(stations.at(i)));
 	}
-	return return_vector;
+	return return_vector;*/
 }
 
 void Train::arrive()

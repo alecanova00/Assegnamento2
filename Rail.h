@@ -33,6 +33,7 @@ using namespace std;
 
             void decrease_time();
 
+            ~Rail();
     };
 
 

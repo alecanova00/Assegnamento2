@@ -109,14 +109,14 @@ void TimeTable::chechOrari(list<Train>* lista) {
             
             if(ttt[j].getTrainNumber() == (*i).get_train_number()){ //se l'elemento nella lista e l'elemento negli orari combaciano
                 cout << "\nVector \t\n";
-                vector<Station> stations = (*i).get_train_path(); //stazioni che il treno deve fare
+                vector<Station*> stations = (*i).get_train_path(); //stazioni che il treno deve fare
                 cout << "\n dopo vector \t\n";
                 double speed = (*i).get_cruise_speed()/3.6; //velocità del treno
                 cout << "\nSPEEEEEEED \t" << speed << "\n";
                 if(ttt[j].getTimes().size() < stations.size()){ //caso in cui ho un difetto di orari
                     vector<int> updatedTimes = ttt[j].getTimes();
                     for(int m=ttt[j].getTimes().size(); m < stations.size(); m++){
-                        int distanceBetweenStations = stations[m].get_station_distance()-stations[m-1].get_station_distance();
+                        int distanceBetweenStations = (stations[m])->get_station_distance()-stations[m-1]->get_station_distance();
                         int time = (int)(distanceBetweenStations/speed)+10; //10 sta per il margine
                         updatedTimes.push_back(ttt[j].getTime(m-1)+time);
                     }
@@ -131,7 +131,7 @@ void TimeTable::chechOrari(list<Train>* lista) {
 
                 for (int ij = 0; ij < stations.size() - 1; ij++) { //aggiustamento degli orari
                     int distanceBetweenStations =
-                            ((stations[ij + 1].get_station_distance()*1000) - (stations[ij].get_station_distance()*1000))-10000; //-10 perchè deve decellerare
+                            ((stations[ij + 1]->get_station_distance()*1000) - (stations[ij]->get_station_distance()*1000))-10000; //-10 perchè deve decellerare
 
                     int time_deceleration = ( 10000/(80/3.6) ) / 60; //tempo che impiega a percorrere gli ultimi 10km prima della stazione
                     int time = (int) time_deceleration + (distanceBetweenStations / speed + 1) + 5 ; //tempo totale
