@@ -61,7 +61,7 @@ private:
     std::vector<TrainTimeTable> ttt;
 public:
     TimeTable(std::string file);
-    void chechOrari(std::list<Train>*);
+    void chechOrari(std::list<Train*>*);
     void setDelay(int train, int delay, int station); //imposta il ritardo
     void toString() const; //stampa l'intero tabellone
 
@@ -69,9 +69,10 @@ public:
     Train_type getTrainType(int train) { return ttt[train].getTrainType(); };
     int getStationType(int train) { return ttt[train].getStationType(); };
     int getTimeTableSize(){return ttt.size();}
+    int getStartTime(const int train){return ttt[train].getTime(0);}
 
     int getArriveTime(const int train, const int station);
-    int getStartTime(const int train){return ttt[train].getTime(0);};
+    int getTrainArriveTime(const int trainNumber, const int station);
 
     ~TimeTable();
 };

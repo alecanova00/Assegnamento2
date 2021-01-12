@@ -1,4 +1,5 @@
 
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,9 +11,6 @@
 #include "High_speed_train_super.h"
 #include "Regional_train.h"
 #include "TimeTable.h"
-
-
-
 
 
 
@@ -130,40 +128,18 @@ StationLink* read_station_file(){
 
 }
 
-StationLink* invert_station_link(StationLink* first){
-
-    StationLink* sl = first;
-
-    while(sl->get_next_link() != 0){     //modo per far scorrere l'intera lista
-
-        sl = sl->get_next_link();
-        
-    }
-
-    while(sl->get_next_link() != 0){
-
-        sl->set_next_link(sl->get_previous_link());
-        sl->set_previous_link(nullptr);
-        sl = sl->get_next_link();
-    }
-
-    return sl;
-
-}
-
 
 int main (void){
 
     //print("1");
     StationLink* first = read_station_file();
-    StationLink* last = invert_station_link(read_station_file());
 
     StationLink* sl = first;
 
     while(sl != 0){     //modo per far scorrere l'intera lista
-        cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
-        cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
-        cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
+        //cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
+        //cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
+        //cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
 
 
         sl = sl->get_next_link();
@@ -191,28 +167,28 @@ int main (void){
    
 
 
-    list<Train> trains;
+    list<Train*> trains;
     
    
-    for(int i = 0; i < timetable.getTimeTableSize(); i++){
-      
+    for(int i = 0; i <= timetable.getTimeTableSize(); i++){
+       
         if(timetable.getTrainType(i) == Train_type::Regional){
-            
-            trains.push_back(Regional_train(120,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
+            //Regional_train* r = new
+            trains.push_back(new Regional_train(120,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
 
         }
         else if(timetable.getTrainType(i) == Train_type::High_speed){
 
-            trains.push_back(High_speed_train(200,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
+            trains.push_back(new High_speed_train(200,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
 
         }
 
         else{
 
-            trains.push_back(High_speed_train_super(280,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
+            trains.push_back(new High_speed_train_super(280,first,timetable.getTrainNumber(i),!timetable.getStationType(i)));
 
         }
-      
+    
         
     }
    
@@ -221,37 +197,79 @@ int main (void){
 
 
 
+
     
     timetable.toString();
-    print("8");
+    //print("8");
     timetable.chechOrari(&trains);
-print("9");
+    //print("9");
     cout << "\n\n\n";
 
     timetable.toString();
-print("10");
+    //print("10");
 
 
 
 
+    vector<Train*> moving_trains;
 
-/*
     int tempo = 0;
 
     while(tempo <= 1440){
-        
-        
+        if(tempo == 783){
+            cout<<"";
+        }
+        list<Train*>::iterator iter;
+        for(iter = trains.begin(); iter != trains.end();iter++){
+            
+            for(int i = 0; i < timetable.getTimeTableSize();i++){
+                Train* tmp = *iter;
+
+                if((timetable.getTrainNumber(i) == tmp->get_train_number()) && (timetable.getStartTime(i) == tempo)){
+
+                    tmp->start();
+
+                    moving_trains.push_back(tmp);
+                    
+                    print("treno aggiunto: ");
+                    cout << (*iter)->get_train_number() << "\n";
+                }
+                
+            }
+        }
+
+        for(int i = 0; i < moving_trains.size(); i++){
+            moving_trains[i]->move();
+            if(moving_trains[i]->is_arrived()){
+                cout<<"Il treno "<<moving_trains[i]->get_train_number()<<" è arrivato alla stazione "
+                    <<moving_trains[i]->get_actual_station().get_station_name()<<endl;
+
+                timetable.setDelay(moving_trains[i]->get_train_number(), moving_trains[i]->get_delay(), moving_trains[i]->get_actual_station_index());
+
+                if(tempo > timetable.getTrainArriveTime(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index())){
+                    int predictedTime = timetable.getTrainArriveTime(moving_trains[i]->get_train_number(),moving_trains[i]->get_actual_station_index());
+
+                    timetable.setDelay(moving_trains[i]->get_train_number(), tempo-predictedTime, moving_trains[i]->get_actual_station_index());
+                }
+
+                timetable.toString();
+            }
 
 
 
 
+            //if(moving_trains[i].is_arrived()) {
+            //    cout << moving_trains[i].get_actual_station().get_station_name() << "\n";
+            //}
+        }
 
+        cout << timeConversion(tempo) << "\n";
 
-
+        tempo++;
     }
 
 
-*/
+
 
     
 

@@ -95,7 +95,15 @@ void TimeTable::setDelay(int train, int delay, int station) {
     }
 }
 
-void TimeTable::chechOrari(list<Train>* lista) {
+void TimeTable::chechOrari(list<Train*>* trains) {
+
+    list<Train> lista;
+    list<Train*>::iterator j;
+    for(j = trains->begin(); j != trains->end(); j++){
+        Train* tmp = *j;
+        lista.push_back(*tmp);
+    }
+
     //foreach treni nella lista di tutti i treni
 
     //5 minuti di stop alle stazioni
@@ -104,15 +112,15 @@ void TimeTable::chechOrari(list<Train>* lista) {
     //conversione km -> metri
 
     list<Train>::iterator i;
-    for(i = (*lista).begin(); i != (*lista).end(); i++){ //scorro la lista di treni ricevuta
+    for(i = lista.begin(); i != lista.end(); i++){ //scorro la lista di treni ricevuta
         for(int j =0; j<ttt.size(); j++){//scorro la lista di orari salvata
             
             if(ttt[j].getTrainNumber() == (*i).get_train_number()){ //se l'elemento nella lista e l'elemento negli orari combaciano
-                //cout << "\nVector \t\n";
+                
                 vector<Station*> stations = (*i).get_train_path(); //stazioni che il treno deve fare
-                //cout << "\n dopo vector \t\n";
+                
                 double speed = (*i).get_cruise_speed()/3.6; //velocità del treno
-                //cout << "\nSPEEEEEEED \t" << speed << "\n";
+                
                 if(ttt[j].getTimes().size() < stations.size()){ //caso in cui ho un difetto di orari
                     vector<int> updatedTimes = ttt[j].getTimes();
                     for(int m=ttt[j].getTimes().size(); m < stations.size(); m++){
@@ -130,13 +138,15 @@ void TimeTable::chechOrari(list<Train>* lista) {
                 }
 
                 for (int ij = 0; ij < stations.size() - 1; ij++) { //aggiustamento degli orari
-
                     int distanceBetweenStations =
-                            ((stations[ij + 1]->get_station_distance()*1000) - (stations[ij]->get_station_distance()*1000))-10000; //-10 perchè deve decellerare
+                            ((stations[ij + 1]->get_station_distance()*1000) - (stations[ij]->get_station_distance()*1000));
 
-                    if(ttt[j].getStationType() == 1)distanceBetweenStations*=-1;
+                    if(ttt[j].getStationType()==1){
+                        distanceBetweenStations *= -1;
+                    }
+                    distanceBetweenStations-=10000;//-10 perchè deve decellerare
                     int time_deceleration = ( 10000/(80/3.6) ) / 60; //tempo che impiega a percorrere gli ultimi 10km prima della stazione
-                    int time = (int) time_deceleration + ((distanceBetweenStations / speed)/60 + 1) + 5 ; //tempo totale
+                    int time = (int) time_deceleration + ((distanceBetweenStations / speed)/60 + 1) ; //tempo totale
 
 
 
@@ -183,4 +193,12 @@ TimeTable::~TimeTable() {
 
 int TimeTable::getArriveTime(const int train, const int station) {
     return ttt[train].getTime(station);
+}
+
+int TimeTable::getTrainArriveTime(const int trainNumber, const int station) {
+    for(int i=0; i<ttt.size(); i++){
+        if(ttt[i].getTrainNumber() == trainNumber){
+            return ttt[i].getTime(station);
+        }
+    }
 }

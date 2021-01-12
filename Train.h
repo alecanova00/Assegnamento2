@@ -10,8 +10,7 @@
 class Train
 {
 public: 
-	Train();
-	~Train();
+
 	inline int get_cruise_speed() const { return CRUISE_SPEED; }
 	inline int get_actual_speed() const { return actual_speed; }
 	inline int get_train_number() const { return train_number; }
@@ -39,8 +38,13 @@ public:
 	/// </summary>
 	/// <returns>the list of the stations</returns>
 	vector<Station*> get_train_path()const;
+	virtual void move();
+    int get_actual_station_index(){return actual_station;}
+    Train();
+    ~Train() ;
+	void start();
 protected:
-	
+
 	
 	/// <summary>
 	/// notify that the train starts from a station

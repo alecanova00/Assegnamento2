@@ -15,4 +15,5 @@ add_executable(Assegnamento_2
         StationLink.h
         TimeTable.h TimeTable.cpp
         Train_type.h Train_status.h
-        main_station.cpp  )
+        main_station.cpp
+          )

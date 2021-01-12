@@ -1,14 +1,22 @@
 
 #include "StationLink.h"
-//#include "Rail.h"
+
 
 
 using namespace std;
+
+
+
 Rail::Rail(){
 
     train = -1;
     time = 0;
 
+}
+
+Rail::~Rail(){
+    //train = -1;
+    //time = 0;
 }
 
 void Rail::set_train(int t){
@@ -37,10 +45,6 @@ bool Rail::is_free(){
 
 void Rail::decrease_time(){
     if(time != -1) time--;
-}
-
-Rail::~Rail() {
-
 }
 
 
@@ -73,7 +77,7 @@ Station::~Station(){
     station_name = "";
     station_distance = 0;
     delete[] standard_rail_forward;
-    delete[] standard_rail_backward;
+    delete[] standard_rail_backward; 
 }
 
 
