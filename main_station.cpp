@@ -17,15 +17,13 @@
 using namespace std;
 
 
-string const STATION_FILE_NAME = "../line_description.txt";
-string const TIMETABLE_FILE_NAME = "../timetables.txt";
+string const STATION_FILE_NAME = "./line_description.txt";  //file della stazione
+string const TIMETABLE_FILE_NAME = "./timetables.txt";      //file della timetable
 
 string const FILE_DELIMITER = "#";
 
-void print(string s){
-    cout<<s<<"\n";
-}
 
+//funzione appartente alle classi StaionLink e station serve a contare il numero di stazioni nel file
 
 int station_file_size(){
     
@@ -56,7 +54,9 @@ int station_file_size(){
     
 }
 
-StationLink* read_station_file(){
+//funzione appartente alle classi StaionLink e station serve a leggere il file delle stazioni e a creare la lista di stazioni
+
+StationLink* read_station_file(){   
     string line;
     ifstream myfile(STATION_FILE_NAME);
     myfile.exceptions (ifstream::badbit);
@@ -75,7 +75,7 @@ StationLink* read_station_file(){
             
             
             if(counter == 0){
-                sl = new StationLink(new PrimaryStation(line,0),nullptr,nullptr);
+                sl = new StationLink(new PrimaryStation(line,0),nullptr,nullptr);   // creazione della prima stazione, quella di origine e viene messa come prima della lista
                 first = sl;
                 counter++;
                 
@@ -93,6 +93,7 @@ StationLink* read_station_file(){
                     line.erase(0,to_string(station_distance).length()+1);
 
                 
+                    //creazione dei nodi e delle stazioni al suo interno in base al tipo di stazione, vengono inoltre messi nella lista i nodi 
 
                     if(station_type == 0){
                         sl->set_next_link(new StationLink(new PrimaryStation(station_name,station_distance),sl,nullptr)) ;
@@ -131,33 +132,10 @@ StationLink* read_station_file(){
 
 int main (void){
 
-    //print("1");
     StationLink* first = read_station_file();
 
     StationLink* sl = first;
 
-    while(sl != 0){     //modo per far scorrere l'intera lista
-        //cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
-        //cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
-        //cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
-
-
-        sl = sl->get_next_link();
-        
-    }
-
-/*
-    sl = last;
-    while(sl != 0){     //modo per far scorrere l'intera lista
-        cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
-        cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
-        cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
-
-        sl = sl->get_next_link();
-        
-    }
-    */
-    
     
  
     TimeTable timetable(TIMETABLE_FILE_NAME);
@@ -193,20 +171,19 @@ int main (void){
     }
    
 
-    //cout << "\n"<<trains.front().get_train_number();
 
 
 
 
     
     timetable.toString();
-    //print("8");
+    
     timetable.chechOrari(&trains);
-    //print("9");
+    
     cout << "\n\n\n";
 
     timetable.toString();
-    //print("10");
+    
 
 
 
@@ -303,33 +280,6 @@ int main (void){
         tempo++;
     }
 
-
-
-
-    
-
-
-
-
-
-
-
-
-    
-    
-    
-     // non va mai modificato perchè bisogna conoscere sempre il primo
-    /*StationLink* sl = first;
-    
-    while(sl != 0){     //modo per far scorrere l'intera lista
- 
-        cout << "Nome stazione:\t"<< sl->get_station()->get_station_name() <<"\n";
-        cout << "Distanza stazione:\t"<<sl->get_station()->get_station_distance()<<"\n";
-        cout << "Tipo stazione:\t"<<sl->get_station()->get_station_type()<<"\n";
-        sl = sl->get_next_link();
-        
-    }*/
-    
 
 
 
