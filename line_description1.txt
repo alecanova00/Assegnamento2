@@ -1,0 +1,13 @@
+Napoli Centrale
+Roma Termini#1#30
+Roma Tiburtina#0#80
+Firenza#0#150
+Bologna Centrale#1#200
+Ferrara#0#280
+Rovigo#1#330
+Padova#0#370
+Vigonza#0#420
+Dolo#1#460
+Mira Marano#1#500
+Mestre#0#550
+Venezia Santa Lucia#0#590
