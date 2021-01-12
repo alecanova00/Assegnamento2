@@ -26,6 +26,8 @@ High_speed_train::High_speed_train(int speed, const StationLink* stns, int nmb, 
 	if (!forward)
 		stations = revert(stations);
 	train_number = nmb;
+	actual_station = 0;
+	next_station = 1;
 	status = Train_status::Create;
 	delete tmp;
 }
@@ -49,6 +51,8 @@ High_speed_train::High_speed_train(int speed,  StationLink stns, int nmb, bool f
 	if (!forward)
 		stations = revert(stations);
 	train_number = nmb;
+	actual_station = 0;
+	next_station = 1;
 	status = Train_status::Create;
 }
 High_speed_train::High_speed_train(const High_speed_train& train) noexcept 
@@ -104,7 +108,7 @@ High_speed_train::~High_speed_train()
 void High_speed_train::move() {
 	if (status == Train_status::End || status == Train_status::Remove)
 		return;
-	if (get_remaining_time() <= 0 && status!=Train_status::Create)
+	if (get_remaining_time() <= 0)
 	{
 		if (status == Train_status::Station)
 			start_from_station();

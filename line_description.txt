@@ -1,13 +1,7 @@
 Santa Maria
 stazione1#1#120
 stazione2#0#150
-stazione3#0#180
-stazione4#0#210
-stazione5#0#240
-stazione6#1#300
 stazione7#0#350
-stazione8#0#380
-stazione9#0#430
 stazione10#0#470
 stazione11#1#500
 stazione12#0#550
